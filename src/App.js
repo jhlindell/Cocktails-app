@@ -1,19 +1,39 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Footer from './components/Footer';
+import NavBar from './components/NavBar';
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
 
 class App extends Component {
   render() {
+    const flexCol = {
+      display: 'flex',
+      flexDirection: 'column',
+    };
+
+    const flex0 = {
+      flex: 0
+    };
+
+    const flex1 = {
+      display: 'flex',
+      flex: '1 1 100%',
+    };
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+      <Router>
+        <div className="App" style={flexCol}>
+          <div style={flex0}>
+            <NavBar />
+          </div>
+          <div style={flex1} id="mainBlock">
+            <h1>What's up Ninja?</h1>
+          </div>
+          <div style={flex0}>
+            <Footer />
+          </div>
+        </div>
+      </Router>
     );
   }
 }
