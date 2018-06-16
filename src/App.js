@@ -1,8 +1,11 @@
 import './App.css';
-import Footer from './components/Footer';
-import NavBar from './components/NavBar';
-import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Footer from './components/Nav/Footer';
+import NavBar from './components/Nav/NavBar';
+import React, { Component } from 'react';
+import StockItemCreate from './components/StockItems/StockItemCreate';
+import StockItemDetail from './components/StockItems/StockItemDetail';
+import StockItemList from './components/StockItems/StockItemList';
 
 
 class App extends Component {
@@ -27,7 +30,11 @@ class App extends Component {
             <NavBar />
           </div>
           <div style={flex1} id="mainBlock">
-            <h1>What's up Ninja?</h1>
+            <Switch>
+              <Route exact path='/stockitems/create' component={StockItemCreate} />
+              <Route exact path='/stockitems' component={StockItemList} />
+              <Route path='/stockitems/:id' component={StockItemDetail} />
+            </Switch>
           </div>
           <div style={flex0}>
             <Footer />
