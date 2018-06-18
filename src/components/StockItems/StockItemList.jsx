@@ -10,13 +10,10 @@ const listStyle = {
 
 class StockItemList extends Component {
   componentDidMount(){
-    console.log("SIL mounting")
     this.props.getStockItemList();
   }
 
   componentWillUnmount(){
-    console.log("SIL unmounting")
-
     this.props.clearStockItemList();
   }
 

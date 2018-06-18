@@ -42,7 +42,7 @@ export function createStockItem(item){
     axios.post(`${URL}/api/stock_items/`, item)
       .then((response)=> {
         console.log("response", response);
-        dispatch(replace('/stockitems'));
+        dispatch(push('/stockitems'));
       })
       .catch((error) => {
         //create error container to post error to
@@ -56,7 +56,7 @@ export function deleteStockItem(id){
     axios.delete(`${URL}/api/stock_items/${id}`)
       .then((response)=> {
         console.log("delete response: ", response);
-        dispatch(replace('/stockitems'));
+        dispatch(push('/stockitems'));
       })
       .catch((error) => {
         //create error container to post error to
