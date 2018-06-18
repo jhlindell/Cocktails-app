@@ -27,7 +27,7 @@ class StockItemCreate extends Component{
     event.preventDefault();
     this.props.createStockItem(this.state);
     this.clearForm();
-    this.props.history.push('/stockitems');
+    //this.props.history.push('/stockitems');
   }
 
   handleInputChange = (event) => {

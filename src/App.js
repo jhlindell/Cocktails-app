@@ -6,9 +6,12 @@ import React, { Component } from 'react';
 import StockItemCreate from './components/StockItems/StockItemCreate';
 import StockItemDetail from './components/StockItems/StockItemDetail';
 import StockItemList from './components/StockItems/StockItemList';
+import HomePage from './components/HomePage';
 
 
 class App extends Component {
+  com
+
   render() {
     const flexCol = {
       display: 'flex',
@@ -31,6 +34,7 @@ class App extends Component {
           </div>
           <div style={flex1} id="mainBlock">
             <Switch>
+              <Route exact path='/' component={HomePage} />
               <Route exact path='/stockitems/create' component={StockItemCreate} />
               <Route exact path='/stockitems' component={StockItemList} />
               <Route path='/stockitems/:id' component={StockItemDetail} />

@@ -29,7 +29,7 @@ class StockItemDetail extends Component{
   deleteItem(){
     const id = this.props.match.params.id;
     this.props.deleteStockItem(id);
-    this.props.history.push('/stockitems')
+    //this.props.history.push('/stockitems')
   }
 
   render(){
