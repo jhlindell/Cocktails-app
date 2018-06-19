@@ -1,7 +1,7 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React, {Component} from 'react';
-import { createStockItem } from '../../actions'
+import { editStockItem, getStockItemById } from '../../actions'
 import { Button, Card, CardBody, CardFooter, CardHeader, Form, FormGroup, Input, Label} from 'reactstrap';
 
 const cardStyle = {
@@ -9,7 +9,7 @@ const cardStyle = {
   margin: 'auto',
 };
 
-class StockItemCreate extends Component{
+class StockItemEdit extends Component{
   constructor(props){
     super(props);
     this.state = {
@@ -22,18 +22,30 @@ class StockItemCreate extends Component{
     }
   }
 
-  createSuccess = () => {
-    this.props.history.push('/stockitems');
+  componentDidMount(){
+    const id = this.props.match.params.id;
+    this.props.getStockItemById(id, this.itemFetchSuccess, this.editFailure);
+  }
+
+  itemFetchSuccess = () => {
+    this.setState({ name: this.props.stockItem.name, description: this.props.stockItem.description });
+  }
+
+  editSuccess = () => {
+    this.props.history.push(`/stockitems/${this.props.match.params.id}`);
+  }
+
+  editFailure = () => {
 
   }
 
-  handleFormSubmit = async (event) => {
+  handleFormSubmit = async(event) => {
     event.preventDefault();
     const valid = await this.validate();
     if(valid){
       const name = this.state.name;
-      const description = this.state.description
-      this.props.createStockItem({ name, description }, this.createSuccess);
+      const description = this.state.description;
+      this.props.editStockItem(this.props.match.params.id, { name, description }, this.editSuccess);
     }
   }
 
@@ -44,46 +56,44 @@ class StockItemCreate extends Component{
     this.setState({[name]: value});
   }
 
-  clearForm = () => {
-    this.setState({ name: '', description: ''});
-    this.props.history.push('/stockitems');
-  }
-
   render(){
-    return(
+    return (
       <Card style={cardStyle}>
         <Form onSubmit={this.handleFormSubmit}>
-            <CardHeader>
-              <h3>Add new ingredient</h3>
-            </CardHeader>
-            <CardBody>
+          <CardHeader>
+            Edit {this.state.name}
+          </CardHeader>
+          <CardBody>
               <FormGroup> 
                 <Label for="itemName">Name</Label>
                 <Input name="name" id="itemName"
-                  className={"" + this.state.errors.name ? ":invalid": ""}
                   type="text"
                   onChange={(e) => {this.handleInputChange(e)}}
                   placeholder="Name"
-                  value={this.state.name}/>            
-                {this.state.errors.name && <div>{this.state.errors.name}</div>}  
+                  value={this.state.name}/> 
+                <div>{this.state.errors.name}</div>            
               </FormGroup>
               <FormGroup> 
                 <Label for="itemDescription">Description</Label>
                 <Input name="description" id="itemDescription"
-                  className={"" + this.state.errors.description ? ":invalid": ""}
                   type="text"
                   onChange={(e) => {this.handleInputChange(e)}}
                   placeholder="Description"
-                  value={this.state.description}/>  
-                <div>{this.state.errors.description}</div>          
+                  value={this.state.description}/> 
+                <div>{this.state.errors.description}</div>            
               </FormGroup>
             </CardBody>
             <CardFooter>
               <div className="btn-group" style={{ margin: 'auto' }}>
-                <Button color="primary" type="submit">
+                <Button 
+                  color="primary" 
+                  type="submit">
                   Submit
                 </Button>
-                <Button color="secondary" type="button" onClick={()=>this.clearForm()}>
+                <Button 
+                  color="secondary" 
+                  type="button" 
+                  onClick={()=>this.props.history.push(`/stockitems/${this.props.match.params.id}`)}>
                   Cancel
                 </Button>
               </div>
@@ -125,10 +135,15 @@ class StockItemCreate extends Component{
   clearErrors(){
     this.setState({ errors: {name: '',description: ''} });
   }
+
+}
+
+function mapStateToProps(state){
+  return { stockItem: state.stockItem }
 }
 
 function mapDispatchToProps(dispatch){
-  return bindActionCreators({ createStockItem }, dispatch);
+  return bindActionCreators({ editStockItem, getStockItemById }, dispatch)
 }
 
-export default connect(null, mapDispatchToProps)(StockItemCreate);
+export default connect(mapStateToProps, mapDispatchToProps)(StockItemEdit);

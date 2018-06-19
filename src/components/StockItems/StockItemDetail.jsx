@@ -2,6 +2,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React, {Component} from 'react';
 import { getStockItemById, clearSingleStockItem, deleteStockItem } from '../../actions';
+import { Button, Card, CardBody, CardFooter } from 'reactstrap';
 
 const stockItemStyle = {
   display: 'flex',
@@ -12,42 +13,65 @@ const buttonStyle = {
   margin: 'auto'
 };
 
-const cardStyle = {
-  padding: '10px'
-};
-
 class StockItemDetail extends Component{
   componentDidMount(){
     const id = this.props.match.params.id;
-    this.props.getStockItemById(id);
+    this.props.getStockItemById(id, this.fetchSuccess, this.fetchErrorRedirect);
   }
 
   componentWillUnmount(){
     this.props.clearSingleStockItem();
   }
 
+  fetchErrorRedirect = () => {
+    this.props.history.push('/stockitems')
+  }
+
+  fetchSuccess(){
+
+  }
+
+  deleteSuccess = () => {
+    this.props.history.push('/stockitems')
+  }
+
   deleteItem(){
     const id = this.props.match.params.id;
-    this.props.deleteStockItem(id);
-    //this.props.history.push('/stockitems')
+    this.props.deleteStockItem(id, this.deleteSuccess);
   }
 
   render(){
     return (
       <div style={stockItemStyle}>
         { this.props.stockItem ? 
-        <div className="card" style={cardStyle}>
-          <p>Name:  {this.props.stockItem.name}</p>
-          <p>Description:  {this.props.stockItem.description}</p>
-          <div style={buttonStyle}>
-            <button 
-              className="btn btn-danger" 
-              type="button"
-              onClick={()=> this.deleteItem()}>
-              Delete
-            </button>
-          </div>
-        </div> :
+        <Card>
+          <CardBody>
+            <p>Name:  {this.props.stockItem.name}</p>
+            <p>Description:  {this.props.stockItem.description}</p>            
+          </CardBody>
+          <CardFooter>
+            <div className="btn-group" style={buttonStyle}>
+              <Button
+                color="primary"
+                type="button"
+                onClick={()=> this.props.history.push('/stockitems')}>
+                Go Back
+              </Button>
+              <Button 
+                color="warning"
+                type="button"
+                onClick={()=> this.props.history.push(`/stockitems/edit/${this.props.match.params.id}`)}>
+                Edit
+                </Button>
+              <Button 
+                color="danger" 
+                type="button"
+                onClick={()=> this.deleteItem()}>
+                Delete
+              </Button>
+            </div>
+          </CardFooter>
+        </Card> :
         <div>Loading...</div>}
       </div>
     );
