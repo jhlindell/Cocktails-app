@@ -1,10 +1,12 @@
 import axios from 'axios';
 const URL = 'http://localhost:8000';
 
-export function getStockItemList(){
+export function getStockItemList(page, limit){
+  const query = `?page=${page}&limit=${limit}`
   return function(dispatch){
-    axios.get(`${URL}/api/stock_items/`)
+    axios.get(`${URL}/api/stock_items${query}`)
       .then((response) => {
+        console.log(response)
         dispatch({ type: 'STOCK_ITEM_LIST', payload: response.data });
       })
       .catch((error) => {
