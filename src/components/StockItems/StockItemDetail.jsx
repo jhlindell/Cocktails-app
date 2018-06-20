@@ -2,7 +2,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React, {Component} from 'react';
 import { getStockItemById, clearSingleStockItem, deleteStockItem } from '../../actions';
-import { Button, Card, CardBody, CardFooter } from 'reactstrap';
+import { Button, Card, CardBody, CardFooter, CardHeader } from 'reactstrap';
 
 const stockItemStyle = {
   display: 'flex',
@@ -12,6 +12,11 @@ const stockItemStyle = {
 const buttonStyle = {
   margin: 'auto'
 };
+
+const cardStyle = {
+  width: '60%',
+  margin: 'auto'
+}
 
 class StockItemDetail extends Component{
   componentDidMount(){
@@ -35,7 +40,7 @@ class StockItemDetail extends Component{
     this.props.history.push('/stockitems')
   }
 
-  deleteItem(){
+  deleteItem = () => {
     const id = this.props.match.params.id;
     this.props.deleteStockItem(id, this.deleteSuccess);
   }
@@ -44,10 +49,12 @@ class StockItemDetail extends Component{
     return (
       <div style={stockItemStyle}>
         { this.props.stockItem ? 
-        <Card>
+        <Card style={cardStyle}>
+          <CardHeader>
+            {this.props.stockItem.name}
+          </CardHeader>
           <CardBody>
-            <p>Name:  {this.props.stockItem.name}</p>
-            <p>Description:  {this.props.stockItem.description}</p>            
+            <p>{this.props.stockItem.description}</p>            
           </CardBody>
           <CardFooter>
             <div className="btn-group" style={buttonStyle}>

@@ -1,5 +1,5 @@
 import React from "react";
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const navBarStyle = {
   display: 'flex',
@@ -21,8 +21,14 @@ const navText = {
 
 const NavBar = () => (
   <ul style={navBarStyle}>
+    <li key='recipes'>
+      <Link to='/recipes' style={navText}>Recipes</Link>
+    </li>
     <li key={'home'}>
-      <span style={navText}>BarCode</span>
+      <Link to='/' style={navText}>BarCode</Link>
+    </li>
+    <li key='stockitems'>
+      <Link to='/stockitems' style={navText}>Ingredients</Link>
     </li>
   </ul>
 );

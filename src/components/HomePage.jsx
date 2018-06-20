@@ -1,8 +1,13 @@
 import React from "react";
 
+const pageStyle = {
+  display: 'flex',
+  margin: 'auto'
+}
+
 const HomePage = () => (
-  <div>
-    <h1>Home page</h1>
+  <div style={pageStyle}>
+    <h1>Welcome to Barcode!</h1>
   </div>
 )
 

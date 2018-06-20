@@ -7,6 +7,7 @@ import StockItemCreate from './components/StockItems/StockItemCreate';
 import StockItemDetail from './components/StockItems/StockItemDetail';
 import StockItemEdit from './components/StockItems/StockItemEdit';
 import StockItemList from './components/StockItems/StockItemList';
+import RecipeList from './components/Recipes/RecipeList';
 import HomePage from './components/HomePage';
 
 
@@ -40,6 +41,8 @@ class App extends Component {
               <Route exact path='/stockitems/create' component={StockItemCreate} />
               <Route exact path='/stockitems' component={StockItemList} />
               <Route path='/stockitems/:id' component={StockItemDetail} />
+
+              <Route path='/recipes' component={RecipeList} />
             </Switch>
           </div>
           <div style={flex0}>

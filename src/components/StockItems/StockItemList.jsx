@@ -8,7 +8,9 @@ import Pagination from "react-js-pagination";
 
 const listStyle = {
     display: 'flex',
-    margin: 'auto'
+    margin: 'auto',
+    marginTop: '20px',
+    marginBottom: '20px'
 };
 
 const footerStyle = {
@@ -35,7 +37,6 @@ class StockItemList extends Component {
   }
 
   handlePageChange = (pageNumber) => {
-    console.log(`active page is ${pageNumber}`);
     this.setState({ activePage: pageNumber }, () => {
       this.props.getStockItemList(this.state.activePage, this.state.itemsPerPage);
     });
@@ -46,8 +47,7 @@ class StockItemList extends Component {
       <Card style={listStyle}>
         <CardHeader>
           <strong>Ingredients</strong>    
-        </CardHeader>
-        
+        </CardHeader>      
           { this.props.stockItemList.docs ? 
             <Table striped>
               <thead>
@@ -59,15 +59,18 @@ class StockItemList extends Component {
               <tbody>
                 {this.props.stockItemList.docs.map((item) => {
                   const linkUrl = `/stockitems/${item._id}`;
-                  return <tr key={item.name + item.description}>
+                  let desc = item.description;
+                  if(item.description.length > 80){
+                    desc = item.description.slice(0, 79) + '...';
+                  }
+                  return <tr key={item._id}>
                     <td><Link to={linkUrl}>{item.name}</Link></td>
-                    <td>{item.description}</td>
+                    <td>{desc}</td>
                   </tr>
                 })}
               </tbody>
             </Table> 
-            : <span>loading...</span> }
-        
+            : <span>loading...</span> }       
         <CardFooter>
           <div style={footerStyle}>
             <Button 
