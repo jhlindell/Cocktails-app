@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
 import { 
   Button, 
-  Card, 
-  CardBody, 
-  CardFooter, 
-  CardHeader, 
+  Card, CardBody, CardFooter, CardHeader, 
   Col, 
   Form, 
   FormGroup, 
   Input, 
-  Label 
+  Label,
 } from 'reactstrap';
 
 
@@ -25,7 +22,13 @@ class RecipeCreate extends Component {
     this.state = {
       name: '',
       description: '',
-      ingredients: [''],
+      ingredients: [
+        {
+          measure: '',
+          unit: 'oz',
+          ingredient: ''
+        }
+      ],
       instructions: [''],
       errors: {
         name: '',
@@ -61,30 +64,60 @@ class RecipeCreate extends Component {
   handleIngredientChange = (event) => {
     const target = event.target;
     const value = target.value;
-    const index = Number(target.name);
+    const name = target.name;
+    const index = Number(target.dataset.index);
     const ingArray = this.state.ingredients;
-    ingArray[index] = value;
+    ingArray[index][name] = value;
     this.setState({ ingredients: ingArray});
   }
 
   addIngredient = () => {
     const ingArray = this.state.ingredients;
-    ingArray.push('');
+    ingArray.push({measure: '', unit: 'oz', ingredient: '' });
     this.setState({ ingredients: ingArray});
   }
 
   renderIngredients = () => {
     return (
       <div>
+        <FormGroup row>
+          <Col sm={2}>Measure</Col>
+          <Col sm={2}>Unit</Col>
+          <Col sm={8}>Ingredient</Col>
+        </FormGroup>
         {this.state.ingredients.map((ingredient, index) => {
           return <FormGroup key={index} row>
-            <Label for={`ingredient${index}`} sm={2}>{index + 1}</Label>
-            <Col sm={10}>
-              <Input name={index} 
+            <Col sm={2}>
+              <Input name="measure"
+                id={`measure${index}`}
+                data-index={index}
+                type="text" 
+                onChange={(e) => this.handleIngredientChange(e)}
+                value={this.state.ingredients[index].measure} />
+            </Col>
+            <Col sm={2}>
+            <Input name="unit"
+              type="select" 
+              id={`unit${index}`}
+              data-index={index}
+              onChange={(e) => this.handleIngredientChange(e)}
+              value={this.state.ingredients[index].unit}>
+                <option>oz</option>
+                <option>tbsp</option>
+                <option>tsp</option>
+                <option>dash</option>
+                <option>drops</option>
+                <option>each</option>
+                <option>piece</option>
+          </Input>
+            </Col>
+            <Col sm={8}>
+              <Input name="ingredient"
                 id={`ingredient${index}`}
+                data-index={index}
                 type="text"
                 onChange={(e, index) => {this.handleIngredientChange(e, index)}}
-                value={this.state.ingredients[index]} />
+                value={this.state.ingredients[index].ingredient} />
             </Col>
           </FormGroup>
         })}
