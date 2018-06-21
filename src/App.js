@@ -7,13 +7,12 @@ import StockItemCreate from './components/StockItems/StockItemCreate';
 import StockItemDetail from './components/StockItems/StockItemDetail';
 import StockItemEdit from './components/StockItems/StockItemEdit';
 import StockItemList from './components/StockItems/StockItemList';
+import RecipeCreate from './components/Recipes/RecipeCreate';
 import RecipeList from './components/Recipes/RecipeList';
 import HomePage from './components/HomePage';
 
 
 class App extends Component {
-  com
-
   render() {
     const flexCol = {
       display: 'flex',
@@ -42,6 +41,7 @@ class App extends Component {
               <Route exact path='/stockitems' component={StockItemList} />
               <Route path='/stockitems/:id' component={StockItemDetail} />
 
+              <Route path='/recipes/create' component={RecipeCreate} />
               <Route path='/recipes' component={RecipeList} />
             </Switch>
           </div>

@@ -24,7 +24,6 @@ class StockItemCreate extends Component{
 
   createSuccess = () => {
     this.props.history.push('/stockitems');
-
   }
 
   handleFormSubmit = async (event) => {
@@ -60,7 +59,7 @@ class StockItemCreate extends Component{
               <FormGroup> 
                 <Label for="itemName">Name</Label>
                 <Input name="name" id="itemName"
-                  className={"" + this.state.errors.name ? ":invalid": ""}
+                  className={"" + this.state.errors.name ? "is-invalid": ""}
                   type="text"
                   onChange={(e) => {this.handleInputChange(e)}}
                   placeholder="Name"
@@ -70,12 +69,12 @@ class StockItemCreate extends Component{
               <FormGroup> 
                 <Label for="itemDescription">Description</Label>
                 <Input name="description" id="itemDescription"
-                  className={"" + this.state.errors.description ? ":invalid": ""}
+                  className={"" + this.state.errors.description ? "is-invalid": ""}
                   type="text"
                   onChange={(e) => {this.handleInputChange(e)}}
                   placeholder="Description"
                   value={this.state.description}/>  
-                <div>{this.state.errors.description}</div>          
+                {this.state.errors.description && <div>{this.state.errors.description}</div> }         
               </FormGroup>
             </CardBody>
             <CardFooter>
