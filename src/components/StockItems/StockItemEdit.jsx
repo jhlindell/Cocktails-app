@@ -36,7 +36,7 @@ class StockItemEdit extends Component{
   }
 
   editFailure = () => {
-
+    this.props.history.push(`/stockitems/${this.props.match.params.id}`);
   }
 
   handleFormSubmit = async(event) => {

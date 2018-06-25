@@ -10,7 +10,7 @@ import {
 } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { createRecipe } from '../../actions/recipeActions';
+import { getRecipeById, editRecipe } from '../../actions/recipeActions';
 
 const cardStyle = {
   display: 'flex',
@@ -18,7 +18,7 @@ const cardStyle = {
   width: '70%'
 };
 
-class RecipeCreate extends Component {
+class RecipeEdit extends Component{
   constructor(props){
     super(props);
     this.state = {
@@ -47,13 +47,34 @@ class RecipeCreate extends Component {
       const description = this.state.description;
       const ingredients = this.state.ingredients;
       const instructions = this.state.instructions;
-      this.props.createRecipe({ name, description, ingredients, instructions }, this.createSuccess);
+      this.props.editRecipe(this.props.match.params.id, 
+        { name, description, ingredients, instructions }, 
+        this.editSuccess, 
+        this.editFailure);
       // console.log("recipe: ", { name, description, ingredients, instructions });
     // }
   }
 
-  createSuccess = () => {
-    this.props.history.push('/recipes');
+  componentDidMount(){
+    const id = this.props.match.params.id;
+    this.props.getRecipeById(id, this.itemFetchSuccess, this.editFailure);
+  }
+
+  itemFetchSuccess = () => {
+    this.setState({ 
+      name: this.props.recipe.name, 
+      description: this.props.recipe.description, 
+      ingredients: this.props.recipe.ingredients,
+      instructions: this.props.recipe.instructions
+    });
+  }
+
+  editSuccess = () => {
+    this.props.history.push(`/recipes/${this.props.match.params.id}`);
+  }
+
+  editFailure = (error) => {
+    console.log(error);
   }
 
   handleInputChange = (event) => {
@@ -172,13 +193,13 @@ class RecipeCreate extends Component {
       </div>
     );
   };
-  
+
   render(){
     return (
       <Card style={cardStyle}>
         <Form onSubmit={this.handleFormSubmit}>
           <CardHeader>
-            New Recipe
+            Edit {this.state.name}
           </CardHeader>
           <CardBody>
             <FormGroup row>
@@ -230,8 +251,12 @@ class RecipeCreate extends Component {
   }
 }
 
-function mapDispatchToProps(dispatch){
-  return bindActionCreators({ createRecipe }, dispatch);
+function mapStateToProps(state){
+  return { recipe: state.recipe};
 }
 
-export default connect(null, mapDispatchToProps)(RecipeCreate);
+function mapDispatchToProps(dispatch){
+  return bindActionCreators({ getRecipeById, editRecipe }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RecipeEdit);
