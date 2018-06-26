@@ -1,7 +1,7 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React, {Component} from 'react';
-import { getStockItemList, clearStockItemList } from '../../actions';
+import { getStockItemList, clearStockItemList } from '../../actions/stockItemActions';
 import { Link } from 'react-router-dom';
 import { Button, Card, CardFooter, CardHeader, Table } from 'reactstrap';
 import Pagination from "react-js-pagination";
@@ -13,10 +13,11 @@ const listStyle = {
     marginBottom: '20px'
 };
 
-const footerStyle = {
+const headerStyle = {
   display: 'flex', 
   margin: 'auto', 
-  justifyContent: 'space-around'
+  justifyContent: 'space-around',
+  alignItems: 'center'
 };
 
 class StockItemList extends Component {
@@ -46,8 +47,24 @@ class StockItemList extends Component {
     return (
       <Card style={listStyle}>
         <CardHeader>
-          <strong>Ingredients</strong>    
-        </CardHeader>      
+          <div style={headerStyle}>
+          <strong>Ingredients</strong>
+            <Button 
+              color="primary"
+              onClick={()=> this.props.history.push('/stockitems/create')}>
+              Add Ingredient
+            </Button>
+            <Pagination
+              activePage={this.state.activePage}
+              itemsCountPerPage={this.state.itemsPerPage}
+              totalItemsCount={this.props.stockItemList.total}
+              pageRangeDisplayed={5}
+              onChange={this.handlePageChange}
+              itemClass='page-item'
+              linkClass='page-link'
+            />
+          </div>   
+        </CardHeader>    
           { this.props.stockItemList.docs ? 
             <Table striped>
               <thead>
@@ -72,7 +89,7 @@ class StockItemList extends Component {
             </Table> 
             : <span>loading...</span> }       
         <CardFooter>
-          <div style={footerStyle}>
+          <div style={headerStyle}>
             <Button 
               color="primary"
               onClick={()=> this.props.history.push('/stockitems/create')}>

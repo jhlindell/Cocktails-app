@@ -1,7 +1,7 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React, {Component} from 'react';
-import { editStockItem, getStockItemById } from '../../actions'
+import { editStockItem, getStockItemById } from '../../actions/stockItemActions'
 import { Button, Card, CardBody, CardFooter, CardHeader, Form, FormGroup, Input, Label} from 'reactstrap';
 
 const cardStyle = {
