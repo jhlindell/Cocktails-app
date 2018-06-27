@@ -1,4 +1,6 @@
 import './App.css';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
+import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Footer from './components/Nav/Footer';
 import NavBar from './components/Nav/NavBar';

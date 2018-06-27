@@ -11,6 +11,9 @@ import {
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createRecipe } from '../../actions/recipeActions';
+import { AsyncTypeahead } from 'react-bootstrap-typeahead';
+import axios from 'axios';
+
 
 const cardStyle = {
   display: 'flex',
@@ -22,13 +25,16 @@ class RecipeCreate extends Component {
   constructor(props){
     super(props);
     this.state = {
+      isLoading: false,
+      options: [],
       name: '',
       description: '',
       ingredients: [
         {
           measure: '',
           unit: 'oz',
-          name: ''
+          name: null,
+          selected: null
         }
       ],
       instructions: [''],
@@ -47,13 +53,17 @@ class RecipeCreate extends Component {
       const description = this.state.description;
       const ingredients = this.state.ingredients;
       const instructions = this.state.instructions;
-      this.props.createRecipe({ name, description, ingredients, instructions }, this.createSuccess);
-      // console.log("recipe: ", { name, description, ingredients, instructions });
+      this.props.createRecipe({ name, description, ingredients, instructions }, this.createSuccess, this.createFailure);
+      console.log("recipe: ", { name, description, ingredients, instructions });
     // }
   }
 
   createSuccess = () => {
     this.props.history.push('/recipes');
+  }
+
+  createFailure = (error) => {
+    console.log(error)
   }
 
   handleInputChange = (event) => {
@@ -79,6 +89,40 @@ class RecipeCreate extends Component {
     this.setState({ ingredients: ingArray});
   }
 
+  handleATAchange = (item, index) => {  
+    const ind = index.index;  
+    const ingArray = this.state.ingredients;
+    if(item.length){
+      ingArray[ind].name = item[0].name;
+      ingArray[ind].selected = item;
+      ingArray[ind]._id = item[0]._id;
+      this.setState({ingredients: ingArray});
+    } else {
+      ingArray[ind].name = '';
+      ingArray[ind].selected = null;
+      ingArray[ind]._id = null;
+      this.setState({ingredients: ingArray});
+    }
+  }
+
+  handleATAInputChange = (input, index) => {
+    const ind = index.index;  
+    const ingArray = this.state.ingredients;
+    ingArray[ind].name = input;
+    this.setState({ ingredients: ingArray });
+  }
+
+  onItemSearch = (query) => {
+    this.setState({isLoading: true});
+    axios.get(`http://localhost:8000/api/stock_items?search${query}`)
+      .then((response) => {
+        this.setState({ options: response.data.docs, isLoading: false });
+      })
+      .catch((error) => {
+        console.log('error getting stock items');
+      });
+  }
+
   renderIngredients = () => {
     return (
       <div>
@@ -98,28 +142,39 @@ class RecipeCreate extends Component {
                 value={this.state.ingredients[index].measure} />
             </Col>
             <Col sm={2}>
-            <Input name="unit"
-              type="select" 
-              id={`unit${index}`}
-              data-index={index}
-              onChange={(e) => this.handleIngredientChange(e)}
-              value={this.state.ingredients[index].unit}>
-                <option>oz</option>
-                <option>tbsp</option>
-                <option>tsp</option>
-                <option>dash</option>
-                <option>drops</option>
-                <option>each</option>
-                <option>piece</option>
-          </Input>
+              <Input name="unit"
+                type="select" 
+                id={`unit${index}`}
+                data-index={index}
+                onChange={(e) => this.handleIngredientChange(e)}
+                value={this.state.ingredients[index].unit}>
+                  <option>oz</option>
+                  <option>tbsp</option>
+                  <option>tsp</option>
+                  <option>dash</option>
+                  <option>drops</option>
+                  <option>each</option>
+                  <option>piece</option>
+              </Input>
             </Col>
             <Col sm={8}>
-              <Input name="name"
+              {/* <Input name="name"
                 id={`ingredient${index}`}
                 data-index={index}
                 type="text"
                 onChange={(e, index) => {this.handleIngredientChange(e, index)}}
-                value={this.state.ingredients[index].name} />
+                value={this.state.ingredients[index].name} /> */}
+              <AsyncTypeahead 
+                name="name"
+                id={`ingredient${index}`}
+                isLoading={this.state.isLoading}
+                data-index={index}
+                labelKey="name"
+                onSearch={query => this.onItemSearch(query)}
+                onChange={(item) => this.handleATAchange(item, {index})}
+                onInputChange={(input) => this.handleATAInputChange(input, {index})}
+                selected={this.state.ingredients[index].selected }
+                options={this.state.options}/>
             </Col>
           </FormGroup>
         })}

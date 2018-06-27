@@ -1,12 +1,14 @@
 import axios from 'axios';
 const URL = 'http://localhost:8000';
 
-export function getRecipeList(page, limit){
-  const query = `?page=${page}&limit=${limit}`;
+export function getRecipeList(page, limit, search){
+  let queryString = `?page=${page}&limit=${limit}`;
+  if(search){
+    queryString += `&search=${search}`;
+  }
   return function(dispatch){
-    axios.get(`${URL}/api/recipes${query}`)
+    axios.get(`${URL}/api/recipes${queryString}`)
       .then((response) => {
-        console.log(response)
         dispatch({ type: 'RECIPE_LIST', payload: response.data });
       })
       .catch((error) => {
@@ -41,7 +43,6 @@ export function deleteRecipe(id, success, failure){
   return function(dispatch){
     axios.delete(`${URL}/api/recipes/${id}`)
       .then((response)=> {
-        console.log("delete response: ", response);
         success();
       })
       .catch((error) => {
@@ -56,7 +57,6 @@ export function createRecipe(recipe, success, failure){
   return function(dispatch){
     axios.post(`${URL}/api/recipes`, recipe)
       .then((response)=> {
-        console.log('create response: ', response);
         success();
       })
       .catch((error) => {
@@ -71,7 +71,6 @@ export function editRecipe(id, recipe, success, failure){
   return function(dispatch){
     axios.put(`${URL}/api/recipes/${id}`, recipe)
       .then((response) => {
-        console.log("edit success: ", response);
         success();
       })
       .catch((error) => {

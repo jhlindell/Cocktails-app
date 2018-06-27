@@ -2,7 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getRecipeList, clearRecipeList } from '../../actions/recipeActions';
-import { Button, Card, CardFooter, CardHeader, Table } from 'reactstrap';
+import { 
+  Button, 
+  Card, CardFooter, CardHeader, 
+  InputGroup, InputGroupAddon, Input, 
+  Table } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import Pagination from "react-js-pagination";
 
@@ -11,6 +15,13 @@ const listStyle = {
   margin: 'auto',
   marginTop: '20px',
   marginBottom: '20px'
+};
+
+const headerStyle = {
+  display: 'flex', 
+  margin: 'auto', 
+  justifyContent: 'space-around',
+  alignItems: 'center'
 };
 
 const footerStyle = {
@@ -24,7 +35,8 @@ class RecipeList extends Component{
     super(props);
     this.state = {
       activePage: 1,
-      itemsPerPage: 20
+      itemsPerPage: 20,
+      searchBox: ''
     };
   }
 
@@ -38,15 +50,62 @@ class RecipeList extends Component{
 
   handlePageChange = (pageNumber) => {
     this.setState({ activePage: pageNumber }, () => {
-      this.props.getRecipeList(this.state.activePage, this.state.itemsPerPage);
+      this.props.getRecipeList(this.state.activePage, this.state.itemsPerPage, this.state.searchBox);
     });
+  }
+
+  handleInputChange = (event) => {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    this.setState({[name]: value});
+  }
+
+  handleSearchSubmit = (event) => {
+    this.props.getRecipeList(this.state.activePage, this.state.itemsPerPage, this.state.searchBox)
   }
 
   render(){
     return (
       <Card style={listStyle}>
         <CardHeader>
-          <strong>Recipes</strong>    
+          <div style={headerStyle}>
+            <strong>Recipes</strong>    
+          </div>
+          <div style={headerStyle}>
+            <div style={{paddingTop: '15px'}}>
+              <Pagination              
+                activePage={this.state.activePage}
+                itemsCountPerPage={this.state.itemsPerPage}
+                totalItemsCount={this.props.recipeList.total}
+                pageRangeDisplayed={5}
+                onChange={this.handlePageChange}
+                itemClass='page-item'
+                linkClass='page-link'
+              />
+            </div>
+            <InputGroup className="ml-2">
+              <Input 
+                name="searchBox" 
+                id="searchBox" 
+                onChange={this.handleInputChange}
+                value={this.state.searchBox}
+              />
+              <InputGroupAddon addonType="append">
+                <Button 
+                  color="primary"
+                  type="button"
+                  onClick={this.handleSearchSubmit}
+                >Search</Button>
+              </InputGroupAddon>
+            </InputGroup>
+            <Button 
+              className="ml-2"
+              color="primary"
+              onClick={()=> this.props.history.push('/recipes/create')}>
+              Add Recipe
+            </Button>
+          </div>
         </CardHeader>      
           { this.props.recipeList.docs ? 
             <Table striped>

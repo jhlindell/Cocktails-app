@@ -32,8 +32,27 @@ class RecipeDetail extends Component {
     this.props.history.push('/recipes')
   }
 
-  fetchSuccess(){
+  fetchSuccess = () => {
+  }
 
+  renderIngredients = () => {
+    const ingArray = this.props.recipe.ingredients;
+    ingArray.sort((a,b) => {
+      if(a.measure > b.measure){
+        return -1;
+      } 
+      if(a.measure < b.measure) {
+        return 1;
+      }
+      return 0
+    });
+    return ingArray.map((ingredient) => {
+      return <tr key={ingredient.name}>
+        <td>{ingredient.measure.toFixed(2)}</td>
+        <td>{ingredient.unit}</td>
+        <td>{ingredient.name}</td>
+      </tr>
+    })
   }
 
   deleteSuccess = () => {
@@ -66,13 +85,7 @@ class RecipeDetail extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.props.recipe.ingredients.map((ingredient) => {
-                  return <tr key={ingredient.name}>
-                    <td>{ingredient.measure.toFixed(2)}</td>
-                    <td>{ingredient.unit}</td>
-                    <td>{ingredient.name}</td>
-                  </tr>
-                })}   
+                {this.props.recipe ? this.renderIngredients(): <span>Loading...</span>}   
               </tbody>   
             </Table>
             <p><strong>Instructions:</strong></p>

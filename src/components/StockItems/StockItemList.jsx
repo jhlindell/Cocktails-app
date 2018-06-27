@@ -3,8 +3,13 @@ import { connect } from 'react-redux';
 import React, {Component} from 'react';
 import { getStockItemList, clearStockItemList } from '../../actions/stockItemActions';
 import { Link } from 'react-router-dom';
-import { Button, Card, CardFooter, CardHeader, Table } from 'reactstrap';
+import { 
+  Button, 
+  Card, CardFooter, CardHeader, 
+  InputGroup, InputGroupAddon, Input, 
+  Table } from 'reactstrap';
 import Pagination from "react-js-pagination";
+// import { AsyncTypeahead, Typeahead } from 'react-bootstrap-typeahead';
 
 const listStyle = {
     display: 'flex',
@@ -25,7 +30,8 @@ class StockItemList extends Component {
     super(props);
     this.state = {
       activePage: 1,
-      itemsPerPage: 20
+      itemsPerPage: 20,
+      searchBox: ''
     };
   }
 
@@ -39,8 +45,19 @@ class StockItemList extends Component {
 
   handlePageChange = (pageNumber) => {
     this.setState({ activePage: pageNumber }, () => {
-      this.props.getStockItemList(this.state.activePage, this.state.itemsPerPage);
+      this.props.getStockItemList(this.state.activePage, this.state.itemsPerPage, this.state.searchBox);
     });
+  }
+
+  handleInputChange = (event) => {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    this.setState({[name]: value});
+  }
+
+  handleSearchSubmit = (event) => {
+    this.props.getStockItemList(this.state.activePage, this.state.itemsPerPage, this.state.searchBox)
   }
 
   render(){
@@ -48,22 +65,42 @@ class StockItemList extends Component {
       <Card style={listStyle}>
         <CardHeader>
           <div style={headerStyle}>
-          <strong>Ingredients</strong>
+            <strong>Ingredients</strong>           
+          </div>
+          <div style={headerStyle}>
+            <div style={{paddingTop: '15px'}}>
+              <Pagination              
+                activePage={this.state.activePage}
+                itemsCountPerPage={this.state.itemsPerPage}
+                totalItemsCount={this.props.stockItemList.total}
+                pageRangeDisplayed={5}
+                onChange={this.handlePageChange}
+                itemClass='page-item'
+                linkClass='page-link'
+              />
+            </div>
+            <InputGroup className="ml-2">
+              <Input 
+                name="searchBox" 
+                id="searchBox" 
+                onChange={this.handleInputChange}
+                value={this.state.searchBox}
+              />
+              <InputGroupAddon addonType="append">
+                <Button 
+                  color="primary"
+                  type="button"
+                  onClick={this.handleSearchSubmit}
+                >Search</Button>
+              </InputGroupAddon>
+            </InputGroup>
             <Button 
+              className="ml-2"
               color="primary"
               onClick={()=> this.props.history.push('/stockitems/create')}>
               Add Ingredient
             </Button>
-            <Pagination
-              activePage={this.state.activePage}
-              itemsCountPerPage={this.state.itemsPerPage}
-              totalItemsCount={this.props.stockItemList.total}
-              pageRangeDisplayed={5}
-              onChange={this.handlePageChange}
-              itemClass='page-item'
-              linkClass='page-link'
-            />
-          </div>   
+          </div>
         </CardHeader>    
           { this.props.stockItemList.docs ? 
             <Table striped>

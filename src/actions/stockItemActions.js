@@ -1,12 +1,14 @@
 import axios from 'axios';
 const URL = 'http://localhost:8000';
 
-export function getStockItemList(page, limit){
-  const query = `?page=${page}&limit=${limit}`
+export function getStockItemList(page, limit, search){
+  let queryString = `?page=${page}&limit=${limit}`;
+  if(search){
+    queryString += `&search=${search}`;
+  }
   return function(dispatch){
-    axios.get(`${URL}/api/stock_items${query}`)
+    axios.get(`${URL}/api/stock_items${queryString}`)
       .then((response) => {
-        console.log(response)
         dispatch({ type: 'STOCK_ITEM_LIST', payload: response.data });
       })
       .catch((error) => {
@@ -41,7 +43,6 @@ export function createStockItem(item, success, failure){
   return function(dispatch){
     axios.post(`${URL}/api/stock_items/`, item)
       .then((response)=> {
-        console.log("response", response);
         success();
       })
       .catch((error) => {
@@ -56,7 +57,6 @@ export function deleteStockItem(id, success, failure){
   return function(dispatch){
     axios.delete(`${URL}/api/stock_items/${id}`)
       .then((response)=> {
-        console.log("delete response: ", response);
         success();
       })
       .catch((error) => {
@@ -71,7 +71,6 @@ export function editStockItem(id, item, success, failure){
   return function(dispatch){
     axios.put(`${URL}/api/stock_items/${id}`, item)
       .then((response) => {
-        console.log("edit success: ", response);
         success();
       })
       .catch((error) => {

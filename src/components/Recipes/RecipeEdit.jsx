@@ -252,7 +252,7 @@ class RecipeEdit extends Component{
 }
 
 function mapStateToProps(state){
-  return { recipe: state.recipe};
+  return { recipe: state.recipe };
 }
 
 function mapDispatchToProps(dispatch){
