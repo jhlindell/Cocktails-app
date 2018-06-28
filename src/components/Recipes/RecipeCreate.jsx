@@ -7,6 +7,7 @@ import {
   FormGroup, 
   Input, 
   Label,
+  Table
 } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -27,17 +28,15 @@ class RecipeCreate extends Component {
     this.state = {
       isLoading: false,
       options: [],
+      selected: null,
+      newIngredientMeasure: '',
+      newIngredientUnit: 'oz',
+      newIngredientName: '',
+      newInstruction: '',
       name: '',
       description: '',
-      ingredients: [
-        {
-          measure: '',
-          unit: 'oz',
-          name: null,
-          selected: null
-        }
-      ],
-      instructions: [''],
+      ingredients: [],
+      instructions: [],
       errors: {
         name: '',
         description: ''
@@ -53,7 +52,7 @@ class RecipeCreate extends Component {
       const description = this.state.description;
       const ingredients = this.state.ingredients;
       const instructions = this.state.instructions;
-      this.props.createRecipe({ name, description, ingredients, instructions }, this.createSuccess, this.createFailure);
+      // this.props.createRecipe({ name, description, ingredients, instructions }, this.createSuccess, this.createFailure);
       console.log("recipe: ", { name, description, ingredients, instructions });
     // }
   }
@@ -73,43 +72,42 @@ class RecipeCreate extends Component {
     this.setState({[name]: value});
   }
 
-  handleIngredientChange = (event) => {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-    const index = Number(target.dataset.index);
-    const ingArray = this.state.ingredients;
-    ingArray[index][name] = value;
-    this.setState({ ingredients: ingArray});
-  }
-
   addIngredient = () => {
     const ingArray = this.state.ingredients;
-    ingArray.push({measure: '', unit: 'oz', name: '' });
-    this.setState({ ingredients: ingArray});
+    const newIngredient = { 
+      measure: this.state.newIngredientMeasure, 
+      unit: this.state.newIngredientUnit, 
+      name: this.state.newIngredientName,
+    };
+    if(this.state.selected && this.state.selected[0]._id){
+      newIngredient._id = this.state.selected[0]._id;
+    }
+    ingArray.push(newIngredient);
+    this.setState({ 
+      ingredients: ingArray, 
+      newIngredientMeasure: '', 
+      newIngredientName: '',
+      selected: null
+    });
+    this.typeahead.getInstance().clear()
   }
 
-  handleATAchange = (item, index) => {  
-    const ind = index.index;  
+  removeIngredient = (index) => {
     const ingArray = this.state.ingredients;
+    ingArray.splice(index, 1);
+    this.setState({ ingredients: ingArray });
+  }
+
+  handleATAchange = (item) => {  
     if(item.length){
-      ingArray[ind].name = item[0].name;
-      ingArray[ind].selected = item;
-      ingArray[ind]._id = item[0]._id;
-      this.setState({ingredients: ingArray});
+      this.setState({ newIngredientName: item[0].name, selected: item });
     } else {
-      ingArray[ind].name = '';
-      ingArray[ind].selected = null;
-      ingArray[ind]._id = null;
-      this.setState({ingredients: ingArray});
+      this.setState({ newIngredientName: '', selected: null });
     }
   }
 
-  handleATAInputChange = (input, index) => {
-    const ind = index.index;  
-    const ingArray = this.state.ingredients;
-    ingArray[ind].name = input;
-    this.setState({ ingredients: ingArray });
+  handleATAInputChange = (input) => { 
+    this.setState({ newIngredientName: input });
   }
 
   onItemSearch = (query) => {
@@ -123,31 +121,61 @@ class RecipeCreate extends Component {
       });
   }
 
+  addInstruction = () => {
+    const insArray = this.state.instructions;
+    insArray.push(this.state.newInstruction);
+    this.setState({ instructions: insArray, newInstruction: ''});
+  }
+
+  removeInstruction = (index) => {
+    const insArray = this.state.instructions;
+    insArray.splice(index, 1);
+    this.setState({ instructions: insArray });
+  }
+
   renderIngredients = () => {
     return (
       <div>
+        {this.state.ingredients.length ? <Table striped>
+          <thead>
+            <tr>
+              <th>Measure</th>
+              <th>Unit</th>
+              <th>Ingredient Name</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.state.ingredients.map((ingredient, index) => {
+              return <tr key={ingredient.name + ingredient.measure}>
+                <td>{ingredient.measure}</td>
+                <td>{ingredient.unit}</td>
+                <td>{ingredient.name}</td>
+                <td>
+                  <Button 
+                    color="danger"
+                    type="button"
+                    onClick={() => this.removeIngredient(index)}
+                  >-</Button>
+                </td>
+              </tr>
+            })}
+          </tbody>
+          </Table> : <div></div>}      
         <FormGroup row>
-          <Col sm={2}>Measure</Col>
-          <Col sm={2}>Unit</Col>
-          <Col sm={8}>Ingredient Name</Col>
-        </FormGroup>
-        {this.state.ingredients.map((ingredient, index) => {
-          return <FormGroup key={index} row>
             <Col sm={2}>
-              <Input name="measure"
-                id={`measure${index}`}
-                data-index={index}
+              <Input name="newIngredientMeasure"
+                id="newIngredientMeasure"
                 type="text" 
-                onChange={(e) => this.handleIngredientChange(e)}
-                value={this.state.ingredients[index].measure} />
+                onChange={(e) => this.handleInputChange(e)}
+                value={this.state.newIngredientMeasure} />
             </Col>
             <Col sm={2}>
-              <Input name="unit"
+              <Input name="newIngredientUnit"
                 type="select" 
-                id={`unit${index}`}
-                data-index={index}
-                onChange={(e) => this.handleIngredientChange(e)}
-                value={this.state.ingredients[index].unit}>
+                id="newIngredientUnit"
+                onChange={(e) => this.handleInputChange(e)}
+                value={this.state.newIngredientUnit}>
                   <option>oz</option>
                   <option>tbsp</option>
                   <option>tsp</option>
@@ -157,77 +185,34 @@ class RecipeCreate extends Component {
                   <option>piece</option>
               </Input>
             </Col>
-            <Col sm={8}>
-              {/* <Input name="name"
-                id={`ingredient${index}`}
-                data-index={index}
-                type="text"
-                onChange={(e, index) => {this.handleIngredientChange(e, index)}}
-                value={this.state.ingredients[index].name} /> */}
+            <Col sm={6}>
               <AsyncTypeahead 
-                name="name"
-                id={`ingredient${index}`}
+                name="newIngredientName"
+                id="newIngredientName"
                 isLoading={this.state.isLoading}
-                data-index={index}
                 labelKey="name"
                 onSearch={query => this.onItemSearch(query)}
-                onChange={(item) => this.handleATAchange(item, {index})}
-                onInputChange={(input) => this.handleATAInputChange(input, {index})}
-                selected={this.state.ingredients[index].selected }
-                options={this.state.options}/>
+                onChange={(item) => this.handleATAchange(item)}
+                onInputChange={(input) => this.handleATAInputChange(input)}
+                selected={this.state.selected }
+                value={this.state.newIngredientName}
+                options={this.state.options}
+                ref={(typeahead) => this.typeahead = typeahead} 
+              />
             </Col>
-          </FormGroup>
-        })}
-        <Button
-          color="primary"
-          type="button"
-          onClick={()=> this.addIngredient()}>
-          Add Ingredient
-        </Button>
+            <Col sm={2}>
+              <Button
+                color="primary"
+                type="button"
+                onClick={()=> this.addIngredient()}>
+                Add
+              </Button>
+            </Col>
+          </FormGroup>       
       </div>
     );
   };
 
-  handleInstructionChange = (event) => {
-    const target = event.target;
-    const value = target.value;
-    const index = Number(target.name);
-    const insArray = this.state.instructions;
-    insArray[index] = value;
-    this.setState({ instructions: insArray});
-  }
-
-  addInstruction = () => {
-    const insArray = this.state.instructions;
-    insArray.push('');
-    this.setState({ instructions: insArray});
-  }
-
-  renderInstructions = () => {
-    return (
-      <div>
-        {this.state.instructions.map((instruction, index) => {
-          return <FormGroup key={index} row>
-          <Label for={`instruction${index}`} sm={2}>{index + 1}</Label>
-          <Col sm={10}>
-            <Input name={index} 
-              id={`instruction${index}`}
-              type="text"
-              onChange={(e, index) => {this.handleInstructionChange(e, index)}}
-              value={this.state.instructions[index]} />
-          </Col>
-        </FormGroup>
-        })}
-        <Button
-          color="primary"
-          type="button"
-          onClick={()=> this.addInstruction()}>
-          Add Instruction
-        </Button>
-      </div>
-    );
-  };
-  
   render(){
     return (
       <Card style={cardStyle}>
@@ -266,7 +251,39 @@ class RecipeCreate extends Component {
             </div>
             <div className="mt-3">
               <p>Instructions:</p>
-              {this.renderInstructions()}
+              <Table>
+                <tbody>
+                  {this.state.instructions.map((instruction, index) => {
+                    return <tr key={instruction}>
+                      <td>{index + 1}</td>
+                      <td>{instruction}</td>
+                      <td>
+                        <Button 
+                          color="danger"
+                          type="button"
+                          onClick={() => this.removeInstruction(index)}
+                        >-</Button>
+                      </td>
+                    </tr>
+                  })}
+                </tbody>
+              </Table>
+              <FormGroup row>
+                <Col sm={9}>
+                  <Input 
+                    name='newInstruction' 
+                    id='newInstruction'
+                    type="text"
+                    onChange={(e) => {this.handleInputChange(e)}}
+                    value={this.state.newInstruction} />
+                </Col>
+                <Button sm={3}
+                  color="primary"
+                  type="button"
+                  onClick={()=> this.addInstruction()}>
+                  Add Instruction
+                </Button>
+              </FormGroup>
             </div>
           </CardBody>
           <CardFooter>
