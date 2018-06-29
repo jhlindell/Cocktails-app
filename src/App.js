@@ -5,10 +5,9 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Footer from './components/Nav/Footer';
 import NavBar from './components/Nav/NavBar';
 import React, { Component } from 'react';
-import StockItemCreate from './components/StockItems/StockItemCreate2';
+import StockItemCreate from './components/StockItems/StockItemCreate';
 import StockItemDetail from './components/StockItems/StockItemDetail';
-import StockItemEdit from './components/StockItems/StockItemEdit2';
-// import StockItemForm from './components/StockItems/StockItemForm';
+import StockItemEdit from './components/StockItems/StockItemEdit';
 import StockItemList from './components/StockItems/StockItemList';
 
 import RecipeCreate from './components/Recipes/RecipeCreate';
@@ -42,6 +41,7 @@ class App extends Component {
           <div style={flex1} id="mainBlock">
             <Switch>
               <Route exact path='/' component={HomePage} />
+              
               <Route exact path='/stockitems/edit/:id' component={StockItemEdit} />
               <Route exact path='/stockitems/create' component={StockItemCreate} />
               <Route exact path='/stockitems' component={StockItemList} />

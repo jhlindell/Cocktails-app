@@ -9,7 +9,6 @@ import {
   InputGroup, InputGroupAddon, Input, 
   Table } from 'reactstrap';
 import Pagination from "react-js-pagination";
-// import { AsyncTypeahead, Typeahead } from 'react-bootstrap-typeahead';
 
 const listStyle = {
     display: 'flex',
