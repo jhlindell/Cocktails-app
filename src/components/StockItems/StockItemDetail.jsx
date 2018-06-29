@@ -21,7 +21,7 @@ const cardStyle = {
 class StockItemDetail extends Component{
   componentDidMount(){
     const id = this.props.match.params.id;
-    this.props.getStockItemById(id, this.fetchSuccess, this.fetchErrorRedirect);
+    this.props.getStockItemById(id, this.fetchErrorRedirect);
   }
 
   componentWillUnmount(){
@@ -30,10 +30,6 @@ class StockItemDetail extends Component{
 
   fetchErrorRedirect = () => {
     this.props.history.push('/stockitems')
-  }
-
-  fetchSuccess(){
-
   }
 
   deleteSuccess = () => {

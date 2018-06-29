@@ -21,12 +21,11 @@ export function clearStockItemList(){
   return { type: 'CLEAR_STOCK_ITEM_LIST' };
 }
 
-export function getStockItemById(id, success, failure){
+export function getStockItemById(id, failure){
   return function(dispatch){
     axios.get(`${URL}/api/stock_items/${id}`)
       .then((response) => {
         dispatch({ type: 'SINGLE_STOCK_ITEM', payload: response.data });
-        success();
       })
       .catch((error) => {
         console.log('error getting stock item by id', error);

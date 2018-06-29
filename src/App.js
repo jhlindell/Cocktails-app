@@ -5,10 +5,12 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Footer from './components/Nav/Footer';
 import NavBar from './components/Nav/NavBar';
 import React, { Component } from 'react';
-import StockItemCreate from './components/StockItems/StockItemCreate';
+import StockItemCreate from './components/StockItems/StockItemCreate2';
 import StockItemDetail from './components/StockItems/StockItemDetail';
-import StockItemEdit from './components/StockItems/StockItemEdit';
+import StockItemEdit from './components/StockItems/StockItemEdit2';
+// import StockItemForm from './components/StockItems/StockItemForm';
 import StockItemList from './components/StockItems/StockItemList';
+
 import RecipeCreate from './components/Recipes/RecipeCreate';
 import RecipeDetail from './components/Recipes/RecipeDetail';
 import RecipeEdit from './components/Recipes/RecipeEdit';
