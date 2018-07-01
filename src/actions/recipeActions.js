@@ -21,12 +21,11 @@ export function clearRecipeList(){
   return { type: 'CLEAR_RECIPE_LIST' };
 }
 
-export function getRecipeById(id, success, failure){
+export function getRecipeById(id, failure){
   return function(dispatch){
     axios.get(`${URL}/api/recipes/${id}`)
       .then((response) => {
         dispatch({ type: 'SINGLE_RECIPE', payload: response.data });
-        success();
       })
       .catch((error) => {
         console.log('error getting recipe by id', error);

@@ -4,6 +4,7 @@ import { Button, Card, CardBody, CardFooter, CardHeader, Form, FormGroup, Input,
 const cardStyle = {
   display: 'flex',
   margin: 'auto',
+  cardColumns: '1'
 };
 
 class StockItemForm extends Component{

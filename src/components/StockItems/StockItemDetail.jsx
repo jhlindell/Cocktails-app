@@ -14,7 +14,7 @@ const buttonStyle = {
 };
 
 const cardStyle = {
-  width: '60%',
+  cardColumns: '1',
   margin: 'auto'
 }
 

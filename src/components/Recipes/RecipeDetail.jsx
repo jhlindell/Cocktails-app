@@ -14,14 +14,14 @@ const buttonStyle = {
 };
 
 const cardStyle = {
-  width: '60%',
-  margin: 'auto'
+  margin: 'auto',
+  cardColumns: '1'
 }
 
 class RecipeDetail extends Component {
   componentDidMount(){
     const id = this.props.match.params.id;
-    this.props.getRecipeById(id, this.fetchSuccess, this.fetchErrorRedirect);
+    this.props.getRecipeById(id, this.fetchErrorRedirect);
   }
 
   componentWillUnmount(){
@@ -30,9 +30,6 @@ class RecipeDetail extends Component {
 
   fetchErrorRedirect = () => {
     this.props.history.push('/recipes')
-  }
-
-  fetchSuccess = () => {
   }
 
   renderIngredients = () => {

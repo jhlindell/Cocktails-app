@@ -41,7 +41,7 @@ class App extends Component {
           <div style={flex1} id="mainBlock">
             <Switch>
               <Route exact path='/' component={HomePage} />
-              
+
               <Route exact path='/stockitems/edit/:id' component={StockItemEdit} />
               <Route exact path='/stockitems/create' component={StockItemCreate} />
               <Route exact path='/stockitems' component={StockItemList} />
