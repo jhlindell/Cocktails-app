@@ -2,7 +2,14 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React, {Component} from 'react';
 import { editStockItem, getStockItemById } from '../../actions/stockItemActions'
+import { Card } from 'reactstrap';
 import StockItemForm from './StockItemForm';
+
+const cardStyle = {
+  display: 'flex',
+  margin: 'auto',
+  cardColumns: '1'
+};
 
 class StockItemEdit extends Component{
   componentDidMount(){
@@ -29,12 +36,14 @@ class StockItemEdit extends Component{
 
   render(){
     return (
-      <StockItemForm 
-        handleFormSubmit={this.editStockItem}
-        stockItem={this.props.stockItem}
-        cancel={this.cancel}
-        {...this.props}
-      />
+      <Card style={cardStyle}>
+        <StockItemForm 
+          handleFormSubmit={this.editStockItem}
+          stockItem={this.props.stockItem}
+          cancel={this.cancel}
+          {...this.props}
+        />
+      </Card>
     );
   }
 

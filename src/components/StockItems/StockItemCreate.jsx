@@ -2,7 +2,14 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React, {Component} from 'react';
 import { createStockItem } from '../../actions/stockItemActions';
+import { Card } from 'reactstrap';
 import StockItemForm from './StockItemForm';
+
+const cardStyle = {
+  display: 'flex',
+  margin: 'auto',
+  cardColumns: '1'
+};
 
 class StockItemCreate extends Component{
   createSuccess = () => {
@@ -20,11 +27,13 @@ class StockItemCreate extends Component{
 
   render(){
     return (
-      <StockItemForm
-        handleFormSubmit={this.createStockItem}
-        cancel={this.cancel}
-        {...this.props}
-      />     
+      <Card style={cardStyle}>
+        <StockItemForm
+          handleFormSubmit={this.createStockItem}
+          cancel={this.cancel}
+          {...this.props}
+        />   
+      </Card>  
     );
   }
 }

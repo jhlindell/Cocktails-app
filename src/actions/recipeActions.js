@@ -60,7 +60,7 @@ export function createRecipe(recipe, success, failure){
       })
       .catch((error) => {
         //create error container to post error to
-        console.log('error creating stock item', error);
+        console.log('error creating recipe', error);
         failure(error);
       });
   }

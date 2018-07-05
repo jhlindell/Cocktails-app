@@ -22,6 +22,17 @@ function stockItem(state = null, action){
   }
 }
 
+function newStockItem(state = null, action){
+  switch(action.type){
+    case 'NEW_STOCK_ITEM':
+      return action.payload;
+    case 'CLEAR_NEW_STOCK_ITEM':
+      return null;
+    default:
+      return state;
+  }
+}
+
 function recipeList(state = [], action){
   switch(action.type){
     case 'RECIPE_LIST':
@@ -47,6 +58,7 @@ function recipe(state = null, action){
 const appReducer = combineReducers({
   stockItemList,
   stockItem,
+  newStockItem,
   recipeList,
   recipe
 });

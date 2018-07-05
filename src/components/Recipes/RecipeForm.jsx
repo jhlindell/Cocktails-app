@@ -7,10 +7,15 @@ import {
   FormGroup, 
   Input, 
   Label,
+  Modal,
   Table
 } from 'reactstrap';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import axios from 'axios';
+import StockItemForm from '../StockItems/StockItemForm';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { createStockItem } from '../../actions/stockItemActions';
 
 const cardStyle = {
   display: 'flex',
@@ -18,12 +23,19 @@ const cardStyle = {
   cardColumns: '1'
 };
 
+const modalStyle = {
+  display: 'flex',
+  width: '100%',
+  textAlign: 'center'
+}
+
 class RecipeForm extends Component{
   constructor(props){
     super(props);
     this.state = {
       isLoading: false,
       options: [],
+      modal: false,
       selected: null,
       newIngredientMeasure: '',
       newIngredientUnit: 'oz',
@@ -35,7 +47,10 @@ class RecipeForm extends Component{
       instructions: [],
       errors: {
         name: '',
-        description: ''
+        description: '',
+        measure: '',
+        ingredient: '',
+        instruction: ''
       }
     }
   }
@@ -51,11 +66,37 @@ class RecipeForm extends Component{
     }
   }
 
+  componentWillReceiveProps(nextProps){
+    console.log("CWRP stockitem: ", nextProps.newStockItem);
+    if(nextProps.newStockItem !== null){
+      this.setState({ selected: [nextProps.newStockItem], newStockItem: null }, 
+        ()=> console.log("CWRP state: ", this.state));
+    }
+  }
+
   handleFormSubmit = (event) => {
     event.preventDefault();
-    // create validation for form 
-    const { name, description, ingredients, instructions } = this.state;
-    this.props.handleFormSubmit({ name, description, ingredients, instructions });
+    const formValid = this.validateForm();
+    if(formValid){
+      const { name, description, ingredients, instructions } = this.state;
+      this.props.handleFormSubmit({ name, description, ingredients, instructions });
+    }
+  }
+
+  validateForm = () => {
+    this.clearErrors();
+    let isValid = true;
+    let errors = {};
+    if(this.state.name === ''){
+      errors.name = 'Please enter a name for this drink.';
+      isValid = false;
+    }
+    if(this.state.description === ''){
+      errors.description = 'Please provide a description for this drink';
+      isValid = false;
+    }
+    this.setState({errors});
+    return isValid;
   }
 
   handleInputChange = (event) => {
@@ -65,34 +106,38 @@ class RecipeForm extends Component{
     this.setState({[name]: value});
   }
 
-  addIngredient = () => {
-    const ingArray = this.state.ingredients;
-    const newIngredient = { 
-      measure: this.state.newIngredientMeasure, 
-      unit: this.state.newIngredientUnit, 
-      name: this.state.newIngredientName,
-    };
-    if(this.state.selected && this.state.selected[0]._id){
-      newIngredient._id = this.state.selected[0]._id;
+  // functions for instructions
+
+  addInstruction = () => {
+    const instructionValid = this.validateInstruction();
+    if(instructionValid){
+      const insArray = this.state.instructions;
+      insArray.push(this.state.newInstruction);
+      this.setState({ instructions: insArray, newInstruction: ''});
     }
-    ingArray.push(newIngredient);
-    this.setState({ 
-      ingredients: ingArray, 
-      newIngredientMeasure: '', 
-      newIngredientName: '',
-      selected: null
-    });
-    this.typeahead.getInstance().clear()
   }
 
-  removeIngredient = (index) => {
-    const ingArray = this.state.ingredients;
-    ingArray.splice(index, 1);
-    this.setState({ ingredients: ingArray });
+  removeInstruction = (index) => {
+    const insArray = this.state.instructions;
+    insArray.splice(index, 1);
+    this.setState({ instructions: insArray });
   }
+
+  validateInstruction = () => {
+    this.clearErrors();
+    let errors = {};
+    let isValid = true;
+    if(this.state.newInstruction === ''){
+      errors.instruction = 'Please enter instruction text.';
+      isValid = false;
+    }
+    this.setState({errors});
+    return isValid;
+  }
+
+  // Functions for ingredients
 
   handleATAchange = (item) => {  
-    console.log("ATA change. item: ", item);
     if(item.length){
       this.setState({ newIngredientName: item[0].name, selected: item });
     } else {
@@ -115,16 +160,80 @@ class RecipeForm extends Component{
       });
   }
 
-  addInstruction = () => {
-    const insArray = this.state.instructions;
-    insArray.push(this.state.newInstruction);
-    this.setState({ instructions: insArray, newInstruction: ''});
+  addIngredient = () => {
+    const ingredientValid = this.validateIngredient();
+    console.log(ingredientValid)
+    if(ingredientValid){
+      if(!this.state.selected){
+        this.addIngToDB();
+      } else {
+        const ingArray = this.state.ingredients;
+          const newIngredient = { 
+          measure: this.state.newIngredientMeasure, 
+          unit: this.state.newIngredientUnit, 
+          name: this.state.newIngredientName,
+        };
+        if(this.state.selected && this.state.selected[0]._id){
+          newIngredient._id = this.state.selected[0]._id;
+        }
+        ingArray.push(newIngredient);
+        this.setState({ 
+          ingredients: ingArray, 
+          newIngredientMeasure: '', 
+          newIngredientName: '',
+          selected: null
+        });
+        this.typeahead.getInstance().clear();
+      } 
+    }
   }
 
-  removeInstruction = (index) => {
-    const insArray = this.state.instructions;
-    insArray.splice(index, 1);
-    this.setState({ instructions: insArray });
+  clearErrors = () => {
+    this.setState({errors: {
+      name: '',
+      description: '',
+      measure: '',
+      ingredient: '',
+      instruction: ''
+    }});
+  }
+
+  validateIngredient = () => {
+    this.clearErrors();
+    let errors = {};
+    let isValid = true;
+    
+    if(Number(this.state.newIngredientMeasure) <= 0) {
+      errors.measure = 'Please enter a positive measure value';
+      isValid = false;
+    }
+
+    if(this.state.newIngredientName === ''){
+      errors.ingredient = 'Please pick an ingredient';
+      isValid = false;
+    }
+    this.setState({ errors });
+    return isValid;
+  }
+
+  removeIngredient = (index) => {
+    const ingArray = this.state.ingredients;
+    ingArray.splice(index, 1);
+    this.setState({ ingredients: ingArray });
+  }
+
+  addIngToDB = () => {
+    this.modalToggle();
+  };
+
+  modalToggle = () => {
+    this.setState({ modal: !this.state.modal });
+  }
+
+  handleIngModalReturn = (stockItem) => {
+    console.log("handleIngModalReturn: ", stockItem);
+    this.modalToggle();
+    this.props.createStockItem(stockItem, ()=> {});
   }
 
   renderIngredients = () => {
@@ -202,7 +311,9 @@ class RecipeForm extends Component{
                 Add
               </Button>
             </Col>
-          </FormGroup>       
+          </FormGroup>
+          {this.state.errors.measure && <div>{this.state.errors.measure}</div>}
+          {this.state.errors.ingredient && <div>{this.state.errors.ingredient}</div>} 
       </div>
     );
   };
@@ -278,6 +389,7 @@ class RecipeForm extends Component{
                   Add Instruction
                 </Button>
               </FormGroup>
+              {this.state.errors.instruction && <div>{this.state.errors.instruction}</div>}
             </div>
           </CardBody>
           <CardFooter>
@@ -291,9 +403,26 @@ class RecipeForm extends Component{
             </div>
           </CardFooter>
         </Form>
+        <Modal isOpen={this.state.modal} toggle={this.state.modalToggle} className="modal-dialog-centered">
+          <Card style={modalStyle}>
+            <StockItemForm
+              stockItem = {{name: this.state.newIngredientName, description: ''}}
+              handleFormSubmit={this.handleIngModalReturn}
+              cancel={this.modalToggle}
+            />         
+          </Card>
+        </Modal>   
       </Card>
     );
   }
 }
 
-export default RecipeForm;
+function mapStateToProps(state){
+  return { newStockItem: state.newStockItem };
+}
+
+function mapDispatchToProps(dispatch){
+  return bindActionCreators({ createStockItem }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RecipeForm);

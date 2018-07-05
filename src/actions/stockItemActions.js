@@ -42,6 +42,8 @@ export function createStockItem(item, success, failure){
   return function(dispatch){
     axios.post(`${URL}/api/stock_items/`, item)
       .then((response)=> {
+        console.log("create stock item action response: ", response.data)
+        dispatch({ type: 'NEW_STOCK_ITEM', payload: response.data });
         success();
       })
       .catch((error) => {
@@ -50,6 +52,10 @@ export function createStockItem(item, success, failure){
         failure(error);
       });
   }
+}
+
+export function clearNewStockItem(){
+  return { type: 'CLEAR_NEW_STOCK_ITEM' };
 }
 
 export function deleteStockItem(id, success, failure){
