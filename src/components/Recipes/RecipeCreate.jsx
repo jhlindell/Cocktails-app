@@ -8,7 +8,6 @@ class RecipeCreate extends Component {
   createRecipe = (recipe) => {
     const { name, description, ingredients, instructions } = recipe;
     this.props.createRecipe({ name, description, ingredients, instructions }, this.createSuccess, this.createFailure);
-    console.log("recipe: ", { name, description, ingredients, instructions });
   }
 
   createSuccess = () => {

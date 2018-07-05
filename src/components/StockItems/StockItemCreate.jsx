@@ -1,7 +1,7 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React, {Component} from 'react';
-import { createStockItem } from '../../actions/stockItemActions';
+import { createStockItem, clearNewStockItem } from '../../actions/stockItemActions';
 import { Card } from 'reactstrap';
 import StockItemForm from './StockItemForm';
 
@@ -13,6 +13,7 @@ const cardStyle = {
 
 class StockItemCreate extends Component{
   createSuccess = () => {
+    this.props.clearNewStockItem();
     this.props.history.push('/stockitems');
   }
 
@@ -39,7 +40,7 @@ class StockItemCreate extends Component{
 }
 
 function mapDispatchToProps(dispatch){
-  return bindActionCreators({ createStockItem }, dispatch);
+  return bindActionCreators({ createStockItem, clearNewStockItem }, dispatch);
 }
 
 export default connect(null, mapDispatchToProps)(StockItemCreate);

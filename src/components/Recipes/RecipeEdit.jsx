@@ -12,7 +12,6 @@ class RecipeEdit extends Component{
       { name, description, ingredients, instructions }, 
       this.editSuccess, 
       this.editFailure);
-    // console.log("recipe: ", { name, description, ingredients, instructions });
   }
 
   componentDidMount(){

@@ -67,10 +67,8 @@ class RecipeForm extends Component{
   }
 
   componentWillReceiveProps(nextProps){
-    console.log("CWRP stockitem: ", nextProps.newStockItem);
     if(nextProps.newStockItem !== null){
-      this.setState({ selected: [nextProps.newStockItem], newStockItem: null }, 
-        ()=> console.log("CWRP state: ", this.state));
+      this.setState({ selected: [nextProps.newStockItem], newStockItem: null });
     }
   }
 
@@ -162,7 +160,6 @@ class RecipeForm extends Component{
 
   addIngredient = () => {
     const ingredientValid = this.validateIngredient();
-    console.log(ingredientValid)
     if(ingredientValid){
       if(!this.state.selected){
         this.addIngToDB();
@@ -231,7 +228,6 @@ class RecipeForm extends Component{
   }
 
   handleIngModalReturn = (stockItem) => {
-    console.log("handleIngModalReturn: ", stockItem);
     this.modalToggle();
     this.props.createStockItem(stockItem, ()=> {});
   }
