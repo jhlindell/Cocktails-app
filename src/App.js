@@ -19,7 +19,8 @@ import RecipeDetail from './components/Recipes/RecipeDetail';
 import RecipeEdit from './components/Recipes/RecipeEdit';
 import RecipeList from './components/Recipes/RecipeList';
 import HomePage from './components/HomePage';
-import ProtectedRoute from './components/ProtectedRoute';
+import requireAuth from './components/auth/require_authentication';
+
 
 
 class App extends Component {
@@ -48,15 +49,15 @@ class App extends Component {
               <Route exact path='/' component={HomePage} />
               <Route path='/signup' component={Signup} />
               <Route path='/signin' component={Signin} />
-              <Route path="/signout" component={Signout} />
+              <Route path='/signout' component={Signout} />
 
-              <Route exact path='/stockitems/edit/:id' component={StockItemEdit} />
-              <Route exact path='/stockitems/create' component={StockItemCreate} />
+              <Route exact path='/stockitems/edit/:id' component={requireAuth(StockItemEdit)} />
+              <Route exact path='/stockitems/create' component={requireAuth(StockItemCreate)} />
               <Route exact path='/stockitems' component={StockItemList} />
               <Route path='/stockitems/:id' component={StockItemDetail} />
               
-              <Route exact path='/recipes/edit/:id' component={RecipeEdit} />
-              <Route exact path='/recipes/create' component={RecipeCreate} />
+              <Route exact path='/recipes/edit/:id' component={requireAuth(RecipeEdit)} />
+              <Route exact path='/recipes/create' component={requireAuth(RecipeCreate)} />
               <Route exact path='/recipes' component={RecipeList} />
               <Route path='/recipes/:id' component={RecipeDetail} />
             </Switch>
