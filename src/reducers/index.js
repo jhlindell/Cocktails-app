@@ -55,12 +55,58 @@ function recipe(state = null, action){
   }
 }
 
+const styleErrorCode = (code) => {
+  if(code.message) {
+    return (code.message.includes('401')) ? 'bad username or password': code.message 
+  } else {
+    return code
+  }
+}
+
+function authReducer(state = {}, action){
+  switch(action.type) {
+    case 'AUTH_USER':
+      localStorage.setItem('token', action.payload);
+      return { ...state, error: '', authenticated: true, token: action.payload };
+    case 'UNAUTH_USER':
+      localStorage.removeItem('token');
+      return { ...state, authenticated: false };
+    case 'AUTH_ERROR':
+      let error = styleErrorCode(action.payload)
+      return { ...state, error };
+    case 'CLEAR_AUTH_ERROR':
+      error = '';
+      return { ...state, error };
+    default:
+      return state;
+  }
+}
+
+function userName(state = null, action){
+  switch(action.type) {
+    case 'SET_USERNAME':
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
 const appReducer = combineReducers({
   stockItemList,
   stockItem,
   newStockItem,
   recipeList,
-  recipe
+  recipe,
+  auth: authReducer,
+  userName
 });
 
-export default appReducer;
+const rootReducer = (state, action) => {
+  if (action.type === 'USER_LOGOUT') {
+    state = undefined
+  }
+
+  return appReducer(state, action)
+}
+
+export default rootReducer;

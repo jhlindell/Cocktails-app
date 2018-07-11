@@ -5,6 +5,10 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Footer from './components/Nav/Footer';
 import NavBar from './components/Nav/NavBar';
 import React, { Component } from 'react';
+import Signup from './components/auth/Signup';
+import Signin from './components/auth/Signin';
+import Signout from './components/auth/Signout';
+
 import StockItemCreate from './components/StockItems/StockItemCreate';
 import StockItemDetail from './components/StockItems/StockItemDetail';
 import StockItemEdit from './components/StockItems/StockItemEdit';
@@ -15,6 +19,7 @@ import RecipeDetail from './components/Recipes/RecipeDetail';
 import RecipeEdit from './components/Recipes/RecipeEdit';
 import RecipeList from './components/Recipes/RecipeList';
 import HomePage from './components/HomePage';
+import ProtectedRoute from './components/ProtectedRoute';
 
 
 class App extends Component {
@@ -41,12 +46,15 @@ class App extends Component {
           <div style={flex1} id="mainBlock">
             <Switch>
               <Route exact path='/' component={HomePage} />
+              <Route path='/signup' component={Signup} />
+              <Route path='/signin' component={Signin} />
+              <Route path="/signout" component={Signout} />
 
               <Route exact path='/stockitems/edit/:id' component={StockItemEdit} />
               <Route exact path='/stockitems/create' component={StockItemCreate} />
               <Route exact path='/stockitems' component={StockItemList} />
               <Route path='/stockitems/:id' component={StockItemDetail} />
-
+              
               <Route exact path='/recipes/edit/:id' component={RecipeEdit} />
               <Route exact path='/recipes/create' component={RecipeCreate} />
               <Route exact path='/recipes' component={RecipeList} />
