@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { addMessageToContainer } from './index';
 const URL = 'http://localhost:8000';
 
 export function getStockItemList(page, limit, search){
@@ -13,7 +14,8 @@ export function getStockItemList(page, limit, search){
         dispatch({ type: 'STOCK_ITEM_LIST', payload: response.data });
       })
       .catch((error) => {
-        console.log('error getting stock items');
+        let err = error.toString();
+        dispatch(addMessageToContainer(err));
       });
   }
 }
@@ -26,11 +28,16 @@ export function getStockItemById(id, failure){
   return function(dispatch){
     axios.get(`${URL}/api/stock_items/${id}`)
       .then((response) => {
+        console.log('GSIBID: ', response);
         dispatch({ type: 'SINGLE_STOCK_ITEM', payload: response.data });
       })
       .catch((error) => {
-        console.log('error getting stock item by id', error);
-        failure(error);
+        let err = error.toString();
+        if(err.includes('404')){
+          err = '404. cannot find ingredient with that id';
+        }
+        dispatch(addMessageToContainer(err));
+        failure();
       });
   }
 }
@@ -39,19 +46,18 @@ export function clearSingleStockItem(){
   return { type: 'CLEAR_SINGLE_STOCK_ITEM' };
 }
 
-export function createStockItem(item, success, failure){
+export function createStockItem(item, success){
   return function(dispatch, getState){
     const { auth } = getState();
     axios.post(`${URL}/api/stock_items/`, item, { headers: {authorization: auth.token }})
       .then((response)=> {
-        console.log("create stock item action response: ", response.data)
         dispatch({ type: 'NEW_STOCK_ITEM', payload: response.data });
+        dispatch(addMessageToContainer('success creating item'));
         success();
       })
       .catch((error) => {
-        //create error container to post error to
-        console.log('error creating stock item', error);
-        failure(error);
+        let err = error.toString();
+        dispatch(addMessageToContainer(err));
       });
   }
 }
@@ -60,7 +66,7 @@ export function clearNewStockItem(){
   return { type: 'CLEAR_NEW_STOCK_ITEM' };
 }
 
-export function deleteStockItem(id, success, failure){
+export function deleteStockItem(id, success){
   return function(dispatch, getState){
     const { auth } = getState();
     axios.delete(`${URL}/api/stock_items/${id}`, { headers: {authorization: auth.token }})
@@ -68,9 +74,8 @@ export function deleteStockItem(id, success, failure){
         success();
       })
       .catch((error) => {
-        //create error container to post error to
-        console.log('error deleting stock item', error);
-        failure(error);
+        let err = error.toString();
+        dispatch(addMessageToContainer(err));
       });
   }
 }
@@ -83,9 +88,9 @@ export function editStockItem(id, item, success, failure){
         success();
       })
       .catch((error) => {
-        //create error container to post error to
-        console.log('error updating stock item', error);
-        failure(error);
+        let err = error.toString();
+        dispatch(addMessageToContainer(err));
+        failure();
       });
   }
 }

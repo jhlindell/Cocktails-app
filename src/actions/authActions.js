@@ -1,4 +1,5 @@
 import axios from "axios";
+import { addMessageToContainer } from "./index";
 const URL = 'http://localhost:8000';
 
 export function signUpUser({username, email, password}){
@@ -42,4 +43,18 @@ export function signInUser({ username, password }){
 export function signoutUser(){
   localStorage.removeItem('token');
   return { type: 'USER_LOGOUT' };
+}
+
+export function getUserName(){
+  return function(dispatch, getState){
+    const { auth } = getState();
+    axios.get(`${URL}/username`, { headers: {authorization: auth.token }})
+      .then(response => {
+        dispatch({ type: 'SET_USERNAME', payload: response.data });
+      })
+      .catch(error => {
+        let err = error.toString();
+        dispatch(addMessageToContainer(err));
+      })
+  }
 }

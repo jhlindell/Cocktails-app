@@ -10,8 +10,7 @@ class RecipeEdit extends Component{
     const { name, description, ingredients, instructions } = recipe;
     this.props.editRecipe(this.props.match.params.id, 
       { name, description, ingredients, instructions }, 
-      this.editSuccess, 
-      this.editFailure);
+      this.editSuccess);
   }
 
   componentDidMount(){
@@ -21,10 +20,6 @@ class RecipeEdit extends Component{
 
   editSuccess = () => {
     this.props.history.push(`/recipes/${this.props.match.params.id}`);
-  }
-
-  editFailure = (error) => {
-    alert(error);
   }
 
   cancel = () => {

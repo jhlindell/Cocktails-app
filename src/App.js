@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Footer from './components/Nav/Footer';
 import NavBar from './components/Nav/NavBar';
 import React, { Component } from 'react';
+
 import Signup from './components/auth/Signup';
 import Signin from './components/auth/Signin';
 import Signout from './components/auth/Signout';
@@ -18,10 +19,11 @@ import RecipeCreate from './components/Recipes/RecipeCreate';
 import RecipeDetail from './components/Recipes/RecipeDetail';
 import RecipeEdit from './components/Recipes/RecipeEdit';
 import RecipeList from './components/Recipes/RecipeList';
+
 import HomePage from './components/HomePage';
 import requireAuth from './components/auth/require_authentication';
 
-
+import MessageContainer from './components/MessageContainer';
 
 class App extends Component {
   render() {
@@ -43,6 +45,9 @@ class App extends Component {
         <div className="App" style={flexCol}>
           <div style={flex0}>
             <NavBar />
+          </div>
+          <div style={flex0}>
+            <MessageContainer />
           </div>
           <div style={flex1} id="mainBlock">
             <Switch>

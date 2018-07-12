@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { addMessageToContainer } from './index';
 const URL = 'http://localhost:8000';
 
 export function getRecipeList(page, limit, search){
@@ -12,7 +13,8 @@ export function getRecipeList(page, limit, search){
         dispatch({ type: 'RECIPE_LIST', payload: response.data });
       })
       .catch((error) => {
-        console.log('error getting recipes');
+        let err = error.toString();
+        dispatch(addMessageToContainer(err));
       });
   }
 }
@@ -28,7 +30,8 @@ export function getRecipeById(id, failure){
         dispatch({ type: 'SINGLE_RECIPE', payload: response.data });
       })
       .catch((error) => {
-        console.log('error getting recipe by id', error);
+        let err = error.toString();
+        dispatch(addMessageToContainer(err));
         failure(error);
       });
   }
@@ -38,7 +41,7 @@ export function clearSingleRecipe(){
   return { type: 'CLEAR_SINGLE_RECIPE' };
 }
 
-export function deleteRecipe(id, success, failure){
+export function deleteRecipe(id, success){
   return function(dispatch, getState){
     const { auth } = getState();
     axios.delete(`${URL}/api/recipes/${id}`, { headers: {authorization: auth.token }})
@@ -46,14 +49,13 @@ export function deleteRecipe(id, success, failure){
         success();
       })
       .catch((error) => {
-        //create error container to post error to
-        console.log('error deleting stock item', error);
-        failure(error);
+        let err = error.toString();
+        dispatch(addMessageToContainer(err));
       });
   }
 }
 
-export function createRecipe(recipe, success, failure){
+export function createRecipe(recipe, success){
   return function(dispatch, getState){
     const { auth } = getState();
     axios.post(`${URL}/api/recipes`, recipe, { headers: {authorization: auth.token }})
@@ -61,14 +63,13 @@ export function createRecipe(recipe, success, failure){
         success();
       })
       .catch((error) => {
-        //create error container to post error to
-        console.log('error creating recipe', error);
-        failure(error);
+        let err = error.toString();
+        dispatch(addMessageToContainer(err));
       });
   }
 }
 
-export function editRecipe(id, recipe, success, failure){
+export function editRecipe(id, recipe, success){
   return function(dispatch, getState){
     const { auth } = getState();
     axios.put(`${URL}/api/recipes/${id}`, recipe, { headers: {authorization: auth.token }})
@@ -76,9 +77,8 @@ export function editRecipe(id, recipe, success, failure){
         success();
       })
       .catch((error) => {
-        //create error container to post error to
-        console.log('error updating recipe', error);
-        failure(error);
+        let err = error.toString();
+        dispatch(addMessageToContainer(err));
       });
   }
 }

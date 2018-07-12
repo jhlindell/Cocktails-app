@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { getUserName } from '../../actions/authActions';
+import { bindActionCreators } from 'redux';
 
 const navBarStyle = {
   display: 'flex',
@@ -21,6 +23,12 @@ const navText = {
 }
 
 class NavBar extends Component {
+
+  componentDidMount(){
+    if(this.props.authenticated && !this.props.userName){
+      this.props.getUserName();
+    }
+  }
 
   renderLinks = () => {
     return (this.props.authenticated) ?
@@ -61,4 +69,8 @@ function mapStateToProps(state){
     userName: state.userName };
 }
 
-export default connect(mapStateToProps, null)(NavBar);
+function mapDispatchToProps(dispatch){
+  return bindActionCreators({ getUserName }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar);
