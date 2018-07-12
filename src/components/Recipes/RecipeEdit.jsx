@@ -24,7 +24,7 @@ class RecipeEdit extends Component{
   }
 
   editFailure = (error) => {
-    console.log(error);
+    alert(error);
   }
 
   cancel = () => {

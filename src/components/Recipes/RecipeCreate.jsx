@@ -15,7 +15,7 @@ class RecipeCreate extends Component {
   }
 
   createFailure = (error) => {
-    console.log(error)
+    alert(error)
   }
 
   cancel = () => {

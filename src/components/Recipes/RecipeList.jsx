@@ -99,12 +99,12 @@ class RecipeList extends Component{
                 >Search</Button>
               </InputGroupAddon>
             </InputGroup>
-            <Button 
+            {this.props.authenticated && <Button 
               className="ml-2"
               color="primary"
               onClick={()=> this.props.history.push('/recipes/create')}>
               Add Recipe
-            </Button>
+            </Button>}
           </div>
         </CardHeader>      
           { this.props.recipeList.docs ? 
@@ -154,7 +154,7 @@ class RecipeList extends Component{
 }
 
 function mapStateToProps(state){
-  return { recipeList: state.recipeList }
+  return { recipeList: state.recipeList, authenticated: state.auth.authenticated }
 }
 
 function mapDispatchToProps(dispatch){

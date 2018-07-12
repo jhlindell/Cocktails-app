@@ -7,6 +7,7 @@ export function getStockItemList(page, limit, search){
     queryString += `&search=${search}`;
   }
   return function(dispatch){
+    
     axios.get(`${URL}/api/stock_items${queryString}`)
       .then((response) => {
         dispatch({ type: 'STOCK_ITEM_LIST', payload: response.data });
@@ -39,8 +40,9 @@ export function clearSingleStockItem(){
 }
 
 export function createStockItem(item, success, failure){
-  return function(dispatch){
-    axios.post(`${URL}/api/stock_items/`, item)
+  return function(dispatch, getState){
+    const { auth } = getState();
+    axios.post(`${URL}/api/stock_items/`, item, { headers: {authorization: auth.token }})
       .then((response)=> {
         console.log("create stock item action response: ", response.data)
         dispatch({ type: 'NEW_STOCK_ITEM', payload: response.data });
@@ -59,8 +61,9 @@ export function clearNewStockItem(){
 }
 
 export function deleteStockItem(id, success, failure){
-  return function(dispatch){
-    axios.delete(`${URL}/api/stock_items/${id}`)
+  return function(dispatch, getState){
+    const { auth } = getState();
+    axios.delete(`${URL}/api/stock_items/${id}`, { headers: {authorization: auth.token }})
       .then((response)=> {
         success();
       })
@@ -73,8 +76,9 @@ export function deleteStockItem(id, success, failure){
 }
 
 export function editStockItem(id, item, success, failure){
-  return function(dispatch){
-    axios.put(`${URL}/api/stock_items/${id}`, item)
+  return function(dispatch, getState){
+    const { auth } = getState();
+    axios.put(`${URL}/api/stock_items/${id}`, item, { headers: {authorization: auth.token }})
       .then((response) => {
         success();
       })

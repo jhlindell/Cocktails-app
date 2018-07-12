@@ -39,8 +39,9 @@ export function clearSingleRecipe(){
 }
 
 export function deleteRecipe(id, success, failure){
-  return function(dispatch){
-    axios.delete(`${URL}/api/recipes/${id}`)
+  return function(dispatch, getState){
+    const { auth } = getState();
+    axios.delete(`${URL}/api/recipes/${id}`, { headers: {authorization: auth.token }})
       .then((response)=> {
         success();
       })
@@ -53,8 +54,9 @@ export function deleteRecipe(id, success, failure){
 }
 
 export function createRecipe(recipe, success, failure){
-  return function(dispatch){
-    axios.post(`${URL}/api/recipes`, recipe)
+  return function(dispatch, getState){
+    const { auth } = getState();
+    axios.post(`${URL}/api/recipes`, recipe, { headers: {authorization: auth.token }})
       .then((response)=> {
         success();
       })
@@ -67,8 +69,9 @@ export function createRecipe(recipe, success, failure){
 }
 
 export function editRecipe(id, recipe, success, failure){
-  return function(dispatch){
-    axios.put(`${URL}/api/recipes/${id}`, recipe)
+  return function(dispatch, getState){
+    const { auth } = getState();
+    axios.put(`${URL}/api/recipes/${id}`, recipe, { headers: {authorization: auth.token }})
       .then((response) => {
         success();
       })

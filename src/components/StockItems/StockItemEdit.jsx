@@ -22,6 +22,7 @@ class StockItemEdit extends Component{
   }
 
   editFailure = (error) => {
+    alert(error);
     this.props.history.push(`/stockitems/${this.props.match.params.id}`);
   }
 

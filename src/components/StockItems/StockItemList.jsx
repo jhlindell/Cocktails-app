@@ -93,12 +93,12 @@ class StockItemList extends Component {
                 >Search</Button>
               </InputGroupAddon>
             </InputGroup>
-            <Button 
+            {this.props.authenticated && <Button 
               className="ml-2"
               color="primary"
               onClick={()=> this.props.history.push('/stockitems/create')}>
               Add Ingredient
-            </Button>
+            </Button>}
           </div>
         </CardHeader>    
           { this.props.stockItemList.docs ? 
@@ -148,7 +148,7 @@ class StockItemList extends Component {
 }
 
 function mapStateToProps(state){
-  return { stockItemList: state.stockItemList }
+  return { stockItemList: state.stockItemList, authenticated: state.auth.authenticated }
 }
 
 function mapDispatchToProps(dispatch){

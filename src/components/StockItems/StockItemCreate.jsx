@@ -17,9 +17,13 @@ class StockItemCreate extends Component{
     this.props.history.push('/stockitems');
   }
 
+  createFailure = (error) => {
+    alert(error);
+  }
+
   createStockItem = (item) => {
       const { name, description } = item;
-      this.props.createStockItem({ name, description }, this.createSuccess);
+      this.props.createStockItem({ name, description }, this.createSuccess, this.createFailure);
   }
 
   cancel = () => {
