@@ -19,7 +19,7 @@ class StockItemCreate extends Component{
 
   createStockItem = (item) => {
       const { name, description } = item;
-      this.props.createStockItem({ name, description }, this.createSuccess);
+      this.props.createStockItem({ name, description }, this.createSuccess, this.createFailure);
   }
 
   cancel = () => {

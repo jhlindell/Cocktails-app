@@ -55,12 +55,80 @@ function recipe(state = null, action){
   }
 }
 
+const styleErrorCode = (code) => {
+  if(code.message) {
+    return (code.message.includes('401')) ? 'bad username or password': code.message 
+  } else {
+    return code
+  }
+}
+
+function authReducer(state = {}, action){
+  switch(action.type) {
+    case 'AUTH_USER':
+      localStorage.setItem('token', action.payload);
+      return { ...state, error: '', authenticated: true, token: action.payload };
+    case 'UNAUTH_USER':
+      localStorage.removeItem('token');
+      return { ...state, authenticated: false };
+    case 'AUTH_ERROR':
+      let error = styleErrorCode(action.payload)
+      return { ...state, error };
+    case 'CLEAR_AUTH_ERROR':
+      error = '';
+      return { ...state, error };
+    default:
+      return state;
+  }
+}
+
+function userName(state = null, action){
+  switch(action.type) {
+    case 'SET_USERNAME':
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
+function messageReducer(state = [], action){
+  switch(action.type){
+    case 'ADD_MESSAGE':
+      const message = action.payload;
+      return [ ...state, message ];
+
+    case 'CLEAR_MESSAGE':
+      let stateArray = state;
+      let filteredArray = stateArray.filter(message => {
+        if(message.id && message.id !== action.payload){
+          return message;
+        }
+        return null;
+      });
+      return filteredArray;
+
+    default:
+      return state;
+  }
+}
+
 const appReducer = combineReducers({
   stockItemList,
   stockItem,
   newStockItem,
   recipeList,
-  recipe
+  recipe,
+  auth: authReducer,
+  userName,
+  messageReducer
 });
 
-export default appReducer;
+const rootReducer = (state, action) => {
+  if (action.type === 'USER_LOGOUT') {
+    state = undefined
+  }
+
+  return appReducer(state, action)
+}
+
+export default rootReducer;

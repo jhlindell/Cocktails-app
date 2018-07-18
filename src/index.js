@@ -9,6 +9,12 @@ import registerServiceWorker from './registerServiceWorker';
 
 import store from './createStore';
 
+const token = localStorage.getItem('token');
+
+if(token){
+  store.dispatch({ type: 'AUTH_USER', payload: token });
+}
+
 ReactDOM.render(
   <Provider store = {store}>    
       <App />    

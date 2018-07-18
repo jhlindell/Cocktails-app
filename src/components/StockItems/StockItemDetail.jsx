@@ -60,18 +60,18 @@ class StockItemDetail extends Component{
                 onClick={()=> this.props.history.push('/stockitems')}>
                 Go Back
               </Button>
-              <Button 
+              {this.props.authenticated && <Button 
                 color="warning"
                 type="button"
                 onClick={()=> this.props.history.push(`/stockitems/edit/${this.props.match.params.id}`)}>
                 Edit
-                </Button>
-              <Button 
+                </Button>}
+              {this.props.authenticated && <Button 
                 color="danger" 
                 type="button"
                 onClick={()=> this.deleteItem()}>
                 Delete
-              </Button>
+              </Button>}
             </div>
           </CardFooter>
         </Card> :
@@ -82,7 +82,7 @@ class StockItemDetail extends Component{
 }
 
 function mapStateToProps(state){
-  return { stockItem: state.stockItem }
+  return { stockItem: state.stockItem, authenticated: state.auth.authenticated }
 }
 
 function mapDispatchToProps(dispatch){

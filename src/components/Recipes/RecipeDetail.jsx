@@ -100,18 +100,18 @@ class RecipeDetail extends Component {
                 onClick={()=> this.props.history.push('/recipes')}>
                 Go Back
               </Button>
-              <Button 
+              {this.props.authenticated &&<Button 
                 color="warning"
                 type="button"
                 onClick={()=> this.props.history.push(`/recipes/edit/${this.props.match.params.id}`)}>
                 Edit
-                </Button>
-              <Button 
+                </Button>}
+              {this.props.authenticated && <Button 
                 color="danger" 
                 type="button"
                 onClick={()=> this.deleteItem()}>
                 Delete
-              </Button>
+              </Button>}
             </div>
           </CardFooter>
         </Card> :
@@ -122,7 +122,7 @@ class RecipeDetail extends Component {
 }
 
 function mapStateToProps(state){
-  return { recipe: state.recipe }
+  return { recipe: state.recipe, authenticated: state.auth.authenticated }
 }
 
 function mapDispatchToProps(dispatch){

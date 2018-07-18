@@ -1,5 +1,8 @@
-import React from "react";
+import React, { Component } from "react";
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { getUserName } from '../../actions/authActions';
+import { bindActionCreators } from 'redux';
 
 const navBarStyle = {
   display: 'flex',
@@ -19,18 +22,55 @@ const navText = {
   fontSize: '20px'
 }
 
-const NavBar = () => (
-  <ul style={navBarStyle}>
-    <li key='recipes'>
-      <Link to='/recipes' style={navText}>Recipes</Link>
-    </li>
-    <li key={'home'}>
-      <Link to='/' style={navText}>BarCode</Link>
-    </li>
-    <li key='stockitems'>
-      <Link to='/stockitems' style={navText}>Ingredients</Link>
-    </li>
-  </ul>
-);
+class NavBar extends Component {
 
-export default NavBar;
+  componentDidMount(){
+    if(this.props.authenticated && !this.props.userName){
+      this.props.getUserName();
+    }
+  }
+
+  renderLinks = () => {
+    return (this.props.authenticated) ?
+      <li key={'signout'}>
+        <span className="mr-3" style={navText}>{this.props.userName}</span>
+        <Link style={navText}  to="/signout">Sign Out</Link>
+      </li> :
+      [
+        <li key={'signin'}>
+          <Link style={navText}  to="/signin">Sign In</Link>
+        </li>,
+        <li key={'signup'}>
+          <Link style={navText} to="/signup">Sign Up</Link>
+        </li>
+      ];
+  }
+  render(){
+    return (
+      <ul style={navBarStyle}>
+        <li key='recipes'>
+          <Link to='/recipes' style={navText}>Recipes</Link>
+        </li>
+        <li key={'home'}>
+          <Link to='/' style={navText}>BarCode</Link>
+        </li>
+        <li key='stockitems'>
+          <Link to='/stockitems' style={navText}>Ingredients</Link>
+        </li>
+        {this.renderLinks()}
+      </ul>
+    );
+  }
+  
+}
+
+function mapStateToProps(state){
+  return { authenticated: state.auth.authenticated,
+    userName: state.userName };
+}
+
+function mapDispatchToProps(dispatch){
+  return bindActionCreators({ getUserName }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar);
