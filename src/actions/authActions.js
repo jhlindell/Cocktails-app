@@ -48,7 +48,7 @@ export function signoutUser(){
 export function getUserName(){
   return function(dispatch, getState){
     const { auth } = getState();
-    axios.get(`${URL}/username`, { headers: {authorization: auth.token }})
+    axios.get(`${URL}/username`, { headers: { authorization: auth.token }})
       .then(response => {
         dispatch({ type: 'SET_USERNAME', payload: response.data });
       })

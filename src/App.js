@@ -51,7 +51,6 @@ class App extends Component {
           </div>
           <div style={flex1} id="mainBlock">
             <Switch>
-              <Route exact path='/' component={HomePage} />
               <Route path='/signup' component={Signup} />
               <Route path='/signin' component={Signin} />
               <Route path='/signout' component={Signout} />
@@ -65,6 +64,8 @@ class App extends Component {
               <Route exact path='/recipes/create' component={requireAuth(RecipeCreate)} />
               <Route exact path='/recipes' component={RecipeList} />
               <Route path='/recipes/:id' component={RecipeDetail} />
+
+              <Route exact path='/' component={HomePage} />
             </Switch>
           </div>
           <div style={flex0}>

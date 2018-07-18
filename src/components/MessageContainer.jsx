@@ -36,7 +36,7 @@ class MessageContainer extends Component {
       return(
         <div style={componentStyle}>
           { this.props.messages.map((message) =>
-          <div className="card" onClick={()=>this.clearMessage(message.id)} key={ message.id } style={cardStyle}>
+          <div className="card" onClick={()=>this.clearMessage(message.id)} key={ message.id + message.message } style={cardStyle}>
             <span>{message.message}</span>
           </div>
           )}
