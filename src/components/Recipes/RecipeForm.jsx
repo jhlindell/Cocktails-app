@@ -129,7 +129,7 @@ class RecipeForm extends Component{
       errors.instruction = 'Please enter instruction text.';
       isValid = false;
     }
-    this.setState({errors});
+    this.setState({errors}, () => console.log(this.state));
     return isValid;
   }
 
@@ -228,6 +228,7 @@ class RecipeForm extends Component{
   }
 
   handleIngModalReturn = (stockItem) => {
+    console.log('handling modal return', stockItem);
     this.modalToggle();
     this.props.createStockItem(stockItem, ()=> {});
   }
@@ -326,7 +327,6 @@ class RecipeForm extends Component{
               <Label for="recipeName" sm={3}>Name</Label>
               <Col sm={9}>
                 <Input name="name" id="recipeName"
-                  className={"" + this.state.errors.name ? "is-invalid": ""}
                   type="text"
                   onChange={(e) => {this.handleInputChange(e)}}
                   placeholder="Recipe Name"
@@ -338,7 +338,6 @@ class RecipeForm extends Component{
               <Label for="recipeDescription" sm={3}>Description</Label>
               <Col sm={9}>
                 <Input name="description" id="recipeDescription"
-                  className={"" + this.state.errors.description ? "is-invalid": ""}
                   type="text"
                   onChange={(e) => {this.handleInputChange(e)}}
                   placeholder="Description"
