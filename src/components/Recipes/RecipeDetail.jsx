@@ -6,7 +6,7 @@ import { Button, Card, CardBody, CardFooter, CardHeader, Table } from 'reactstra
 
 const outerDivStyle = {
   display: 'flex',
-  margin: 'auto',
+  width: '100%',
 };
 
 const buttonStyle = {
@@ -15,7 +15,7 @@ const buttonStyle = {
 
 const cardStyle = {
   margin: 'auto',
-  cardColumns: '1'
+  maxWidth: '60%'
 }
 
 class RecipeDetail extends Component {

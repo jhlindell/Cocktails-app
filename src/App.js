@@ -11,7 +11,7 @@ import Signin from './components/auth/SigninContainer';
 import Signout from './components/auth/Signout';
 
 import StockItemCreate from './components/StockItems/StockItemCreate';
-import StockItemDetail from './components/StockItems/StockItemDetail';
+import StockItemDetail from './components/StockItems/StockItemDetailContainer';
 import StockItemEdit from './components/StockItems/StockItemEdit';
 import StockItemList from './components/StockItems/StockItemListContainer';
 

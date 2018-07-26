@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, CardBody, CardFooter, CardHeader, Form, FormGroup, Input, Label} from 'reactstrap';
+import StockItemFormDisplay from './StockItemFormDisplay';
 
 class StockItemForm extends Component{
   constructor(props){
@@ -71,43 +71,12 @@ class StockItemForm extends Component{
 
   render(){
     return (
-      <Form onSubmit={this.handleFormSubmit}>
-          <CardHeader>
-            <h3>Add new ingredient</h3>
-          </CardHeader>
-          <CardBody>
-            <FormGroup>
-              <Label for="itemName">Name</Label>
-              <Input name="name" id="itemName"
-                className={"" + this.state.errors.name ? "is-invalid": ""}
-                type="text"
-                onChange={(e) => {this.handleInputChange(e)}}
-                placeholder="Name"
-                value={this.state.name}/>
-              {this.state.errors.name && <div>{this.state.errors.name}</div>}
-            </FormGroup>
-            <FormGroup>
-              <Label for="itemDescription">Description</Label>
-              <Input name="description" id="itemDescription"
-                className={"" + this.state.errors.description ? "is-invalid": ""}
-                type="text"
-                onChange={(e) => {this.handleInputChange(e)}}
-                placeholder="Description"
-                value={this.state.description}/>
-              {this.state.errors.description && <div>{this.state.errors.description}</div>}
-            </FormGroup>
-          </CardBody>
-          <CardFooter>
-            <div className="btn-group" >
-              <Button color="primary" type="submit">
-                Submit
-              </Button>
-              <Button color="secondary" type="button" onClick={()=>this.props.cancel()}>
-                Cancel
-              </Button>
-            </div>
-          </CardFooter>
-      </Form>
+      <StockItemFormDisplay 
+        state={ this.state }
+        inputChange={ this.handleInputChange }
+        formSubmit={ this.handleFormSubmit }
+        cancel={ this.props.cancel }
+      />
     )
   }
 };
