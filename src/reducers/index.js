@@ -57,7 +57,7 @@ function recipe(state = null, action){
 
 const styleErrorCode = (code) => {
   if(code.message) {
-    return (code.message.includes('401')) ? 'bad username or password': code.message 
+    return (code.message.includes('401')) ? 'bad username or password': code.message
   } else {
     return code
   }
