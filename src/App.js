@@ -18,7 +18,7 @@ import StockItemList from './components/StockItems/StockItemListContainer';
 import RecipeCreate from './components/Recipes/RecipeCreate';
 import RecipeDetail from './components/Recipes/RecipeDetail';
 import RecipeEdit from './components/Recipes/RecipeEdit';
-import RecipeList from './components/Recipes/RecipeList';
+import RecipeList from './components/Recipes/RecipeListContainer';
 
 import HomePage from './components/HomePage';
 import requireAuth from './components/auth/require_authentication';

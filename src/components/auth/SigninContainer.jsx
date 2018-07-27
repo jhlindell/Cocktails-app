@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { signInUser, clearAuthError } from '../../actions/authActions';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import SigninDisplay from './SigninDisplay';
 
 class Signin extends Component {

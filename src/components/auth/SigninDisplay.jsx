@@ -38,7 +38,6 @@ const SigninDisplay = (props) => {
                 placeholder="Password" value={ props.state.password } />
             </div>
             { props.renderAlert() }
-            {/* <Link className="mb-2" to="/signInTrouble">Trouble Signing In?</Link> */}
             <button type="submit" className="btn btn-primary">
               Submit
             </button>

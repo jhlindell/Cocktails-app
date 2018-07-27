@@ -2,21 +2,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React, {Component} from 'react';
 import { getRecipeById, clearSingleRecipe, deleteRecipe } from '../../actions/recipeActions';
-import { Button, Card, CardBody, CardFooter, CardHeader, Table } from 'reactstrap';
-
-const outerDivStyle = {
-  display: 'flex',
-  width: '100%',
-};
-
-const buttonStyle = {
-  margin: 'auto'
-};
-
-const cardStyle = {
-  margin: 'auto',
-  maxWidth: '60%'
-}
+import RecipeDetailDisplay from './RecipeDetailDisplay';
 
 class RecipeDetail extends Component {
   componentDidMount(){
@@ -63,61 +49,14 @@ class RecipeDetail extends Component {
 
   render(){
     return (
-      <div style={outerDivStyle}>
-        { this.props.recipe ? 
-        <Card style={cardStyle}>
-          <CardHeader>
-            {this.props.recipe.name}
-          </CardHeader>
-          <CardBody>
-            <p><strong>Description:</strong></p>
-            <p>{this.props.recipe.description}</p>
-            <p><strong>Ingredients:</strong></p>
-            <Table>
-              <thead>
-                <tr>
-                  <th>measure:</th>
-                  <th>unit:</th>
-                  <th>name:</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.props.recipe ? this.renderIngredients(): <span>Loading...</span>}   
-              </tbody>   
-            </Table>
-            <p><strong>Instructions:</strong></p>
-            <ol>
-              {this.props.recipe.instructions.map((instruction) => {
-                return <li key={instruction}>{instruction}</li>
-              })}
-            </ol>
-          </CardBody>
-          <CardFooter>
-            <div className="btn-group" style={buttonStyle}>
-              <Button
-                color="primary"
-                type="button"
-                onClick={()=> this.props.history.push('/recipes')}>
-                Go Back
-              </Button>
-              {this.props.authenticated &&<Button 
-                color="warning"
-                type="button"
-                onClick={()=> this.props.history.push(`/recipes/edit/${this.props.match.params.id}`)}>
-                Edit
-                </Button>}
-              {this.props.authenticated && <Button 
-                color="danger" 
-                type="button"
-                onClick={()=> this.deleteItem()}>
-                Delete
-              </Button>}
-            </div>
-          </CardFooter>
-        </Card> :
-        <div>Loading...</div>}
-      </div>
-    )
+      <RecipeDetailDisplay 
+        recipe={ this.props.recipe }
+        authenticated={ this.props.authenticated }
+        renderIngredients={ this.renderIngredients }
+        deleteItem={ this.deleteItem }
+        { ...this.props }
+      />
+    );
   }
 }
 

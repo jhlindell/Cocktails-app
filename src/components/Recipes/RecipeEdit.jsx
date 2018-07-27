@@ -23,7 +23,7 @@ class RecipeEdit extends Component{
   }
 
   cancel = () => {
-    this.props.history.push('/recipes');
+    this.props.history.push(`/recipes/${this.props.match.params.id}`);
   }
 
   render(){
