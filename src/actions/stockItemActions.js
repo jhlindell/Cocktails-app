@@ -46,12 +46,10 @@ export function clearSingleStockItem(){
 }
 
 export function createStockItem(item, success){
-  console.log('CSI item: ', item);
   return function(dispatch, getState){
     const { auth } = getState();
     axios.post(`${URL}/api/stock_items/`, item, { headers: {authorization: auth.token }})
       .then((response)=> {
-        console.log('CSI response: ', response);
         dispatch({ type: 'NEW_STOCK_ITEM', payload: response.data });
         dispatch(addMessageToContainer('success creating item'));
         success();

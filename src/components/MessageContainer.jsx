@@ -3,28 +3,29 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { clearMessage } from '../actions/index';
 
-const componentStyle = {
-  display: 'flex',
-  height: '50px',
-  width: '100%',
-  justifyContent: 'left',
-  alignItems: 'center',
-  flexWrap: 'wrap',
-  listStyle: 'none',
-  padding: 0,
-  margin: 0
-};
+const styles = {
+  component: {
+    display: 'flex',
+    height: '50px',
+    width: '100%',
+    justifyContent: 'left',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    listStyle: 'none',
+    padding: 0,
+    margin: 0
+  },
 
-const cardStyle = {
-  padding: '5px',
-  margin: '2px',
-  display: 'flex',
-  justifyContent: 'center',
-  flexDirection: 'row',
-  backgroundColor: 'black',
-  color: 'white'
-};
-
+  card: {
+    padding: '5px',
+    margin: '2px',
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    backgroundColor: 'black',
+    color: 'white'
+  },
+}
 
 class MessageContainer extends Component {
   clearMessage(id){
@@ -34,11 +35,16 @@ class MessageContainer extends Component {
   renderMessages(){
     if(this.props.messages.length){
       return(
-        <div style={componentStyle}>
+        <div style={ styles.component }>
           { this.props.messages.map((message) =>
-          <div className="card" onClick={()=>this.clearMessage(message.id)} key={ message.id + message.message } style={cardStyle}>
-            <span>{message.message}</span>
-          </div>
+            <div 
+              className="card" 
+              onClick={()=>this.clearMessage(message.id)} 
+              key={ message.id + message.message } 
+              style={ styles.card }
+            >
+              <span>{message.message}</span>
+            </div>
           )}
         </div>
       )
@@ -48,7 +54,7 @@ class MessageContainer extends Component {
   render(){
     return (
       <div >
-        {this.renderMessages()}
+        { this.renderMessages() }
       </div>
     );
   }

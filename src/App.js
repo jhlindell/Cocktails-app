@@ -6,19 +6,19 @@ import Footer from './components/Nav/Footer';
 import NavBar from './components/Nav/NavBar';
 import React, { Component } from 'react';
 
-import Signup from './components/auth/Signup';
-import Signin from './components/auth/Signin';
+import Signup from './components/auth/SignupContainer';
+import Signin from './components/auth/SigninContainer';
 import Signout from './components/auth/Signout';
 
 import StockItemCreate from './components/StockItems/StockItemCreate';
-import StockItemDetail from './components/StockItems/StockItemDetail';
+import StockItemDetail from './components/StockItems/StockItemDetailContainer';
 import StockItemEdit from './components/StockItems/StockItemEdit';
-import StockItemList from './components/StockItems/StockItemList';
+import StockItemList from './components/StockItems/StockItemListContainer';
 
 import RecipeCreate from './components/Recipes/RecipeCreate';
 import RecipeDetail from './components/Recipes/RecipeDetail';
 import RecipeEdit from './components/Recipes/RecipeEdit';
-import RecipeList from './components/Recipes/RecipeList';
+import RecipeList from './components/Recipes/RecipeListContainer';
 
 import HomePage from './components/HomePage';
 import requireAuth from './components/auth/require_authentication';
