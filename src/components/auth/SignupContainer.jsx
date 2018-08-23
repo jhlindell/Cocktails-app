@@ -42,7 +42,6 @@ class Signup extends Component {
       };
       this.props.signUpUser(modProps);
       // this.props.history.push('/signin');
-      console.log(modProps);
     }
   }
 

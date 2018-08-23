@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getRecipeList, clearRecipeList } from '../../actions/recipeActions';
 import RecipeListDisplay from './RecipeListDisplay';
+import Debug from 'debug';
+const debug = Debug('BarCode:recipeListContainer');
 
 class RecipeList extends Component{
   constructor(props) {
@@ -41,6 +43,7 @@ class RecipeList extends Component{
   }
 
   render(){
+    debug(this.props.recipeList);
     return (
       <RecipeListDisplay
         recipeList={ this.props.recipeList }

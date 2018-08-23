@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { getRecipeById, editRecipe } from '../../actions/recipeActions';
-import RecipeForm from './RecipeForm';
+import RecipeForm from './RecipeFormContainer';
 
 
 class RecipeEdit extends Component{
