@@ -16,7 +16,8 @@ import StockItemForm from '../StockItems/StockItemForm';
 const cardStyle = {
   display: 'flex',
   margin: 'auto',
-  cardColumns: '1'
+  cardColumns: '1',
+  fontSize: '0.8rem'
 };
 
 const modalStyle = {
