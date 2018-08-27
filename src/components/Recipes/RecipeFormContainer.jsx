@@ -8,7 +8,6 @@ import RecipeFormDisplay from './RecipeFormDisplay';
 class RecipeForm extends Component{
   constructor(props){
     super(props);
-    this.child = React.createRef();
     this.state = {
       isLoading: false,
       options: [],
@@ -157,7 +156,7 @@ class RecipeForm extends Component{
           newIngredientName: '',
           selected: null
         });
-        this.child.current.clearTypeahead();
+        this.child.clearTypeahead();
       } 
     }
   }
@@ -211,7 +210,7 @@ class RecipeForm extends Component{
 
   render(){
     return <RecipeFormDisplay 
-      ref={ this.child }
+      ref={ instance => { this.child = instance; }}
       state={ this.state }
       handleFormSubmit={ this.handleFormSubmit }
       handleInputChange={ this.handleInputChange }
