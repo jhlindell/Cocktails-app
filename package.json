@@ -30,7 +30,7 @@
     "react-js-pagination": "^3.0.2",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "1.1.4",
+    "react-scripts": "3.3.0",
     "reactstrap": "^6.1.0",
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
@@ -48,5 +48,17 @@
   "devDependencies": {
     "@types/redux-devtools-extension": "^2.13.2",
     "redux-devtools-extension": "^2.13.2"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
