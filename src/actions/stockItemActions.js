@@ -1,14 +1,14 @@
 import axios from 'axios';
 import { addMessageToContainer } from './index';
-const URL = 'http://localhost:8000';
+const URL = process.env.REACT_APP_SERVER_URL;
 
-export function getStockItemList(page, limit, search){
+export function getStockItemList(page, limit, search) {
   let queryString = `?page=${page}&limit=${limit}`;
-  if(search){
+  if (search) {
     queryString += `&search=${search}`;
   }
-  return function(dispatch){
-    
+  return function (dispatch) {
+
     axios.get(`${URL}/api/stock_items${queryString}`)
       .then((response) => {
         dispatch({ type: 'STOCK_ITEM_LIST', payload: response.data });
@@ -20,19 +20,19 @@ export function getStockItemList(page, limit, search){
   }
 }
 
-export function clearStockItemList(){
+export function clearStockItemList() {
   return { type: 'CLEAR_STOCK_ITEM_LIST' };
 }
 
-export function getStockItemById(id, failure){
-  return function(dispatch){
+export function getStockItemById(id, failure) {
+  return function (dispatch) {
     axios.get(`${URL}/api/stock_items/${id}`)
       .then((response) => {
         dispatch({ type: 'SINGLE_STOCK_ITEM', payload: response.data });
       })
       .catch((error) => {
         let err = error.toString();
-        if(err.includes('404')){
+        if (err.includes('404')) {
           err = '404. cannot find ingredient with that id';
         }
         dispatch(addMessageToContainer(err));
@@ -41,15 +41,15 @@ export function getStockItemById(id, failure){
   }
 }
 
-export function clearSingleStockItem(){
+export function clearSingleStockItem() {
   return { type: 'CLEAR_SINGLE_STOCK_ITEM' };
 }
 
-export function createStockItem(item, success){
-  return function(dispatch, getState){
+export function createStockItem(item, success) {
+  return function (dispatch, getState) {
     const { auth } = getState();
-    axios.post(`${URL}/api/stock_items/`, item, { headers: {authorization: auth.token }})
-      .then((response)=> {
+    axios.post(`${URL}/api/stock_items/`, item, { headers: { authorization: auth.token } })
+      .then((response) => {
         dispatch({ type: 'NEW_STOCK_ITEM', payload: response.data });
         dispatch(addMessageToContainer('success creating item'));
         success();
@@ -61,15 +61,15 @@ export function createStockItem(item, success){
   }
 }
 
-export function clearNewStockItem(){
+export function clearNewStockItem() {
   return { type: 'CLEAR_NEW_STOCK_ITEM' };
 }
 
-export function deleteStockItem(id, success){
-  return function(dispatch, getState){
+export function deleteStockItem(id, success) {
+  return function (dispatch, getState) {
     const { auth } = getState();
-    axios.delete(`${URL}/api/stock_items/${id}`, { headers: {authorization: auth.token }})
-      .then((response)=> {
+    axios.delete(`${URL}/api/stock_items/${id}`, { headers: { authorization: auth.token } })
+      .then((response) => {
         success();
       })
       .catch((error) => {
@@ -79,10 +79,10 @@ export function deleteStockItem(id, success){
   }
 }
 
-export function editStockItem(id, item, success, failure){
-  return function(dispatch, getState){
+export function editStockItem(id, item, success, failure) {
+  return function (dispatch, getState) {
     const { auth } = getState();
-    axios.put(`${URL}/api/stock_items/${id}`, item, { headers: {authorization: auth.token }})
+    axios.put(`${URL}/api/stock_items/${id}`, item, { headers: { authorization: auth.token } })
       .then((response) => {
         success();
       })

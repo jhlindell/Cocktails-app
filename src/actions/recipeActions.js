@@ -1,13 +1,13 @@
 import axios from 'axios';
 import { addMessageToContainer } from './index';
-const URL = 'http://localhost:8000';
+const URL = process.env.REACT_APP_SERVER_URL;
 
-export function getRecipeList(page, limit, search){
+export function getRecipeList(page, limit, search) {
   let queryString = `?page=${page}&limit=${limit}`;
-  if(search){
+  if (search) {
     queryString += `&search=${search}`;
   }
-  return function(dispatch){
+  return function (dispatch) {
     axios.get(`${URL}/api/recipes${queryString}`)
       .then((response) => {
         dispatch({ type: 'RECIPE_LIST', payload: response.data });
@@ -19,12 +19,12 @@ export function getRecipeList(page, limit, search){
   }
 }
 
-export function clearRecipeList(){
+export function clearRecipeList() {
   return { type: 'CLEAR_RECIPE_LIST' };
 }
 
-export function getRecipeById(id, failure){
-  return function(dispatch){
+export function getRecipeById(id, failure) {
+  return function (dispatch) {
     axios.get(`${URL}/api/recipes/${id}`)
       .then((response) => {
         dispatch({ type: 'SINGLE_RECIPE', payload: response.data });
@@ -37,15 +37,15 @@ export function getRecipeById(id, failure){
   }
 }
 
-export function clearSingleRecipe(){
+export function clearSingleRecipe() {
   return { type: 'CLEAR_SINGLE_RECIPE' };
 }
 
-export function deleteRecipe(id, success){
-  return function(dispatch, getState){
+export function deleteRecipe(id, success) {
+  return function (dispatch, getState) {
     const { auth } = getState();
-    axios.delete(`${URL}/api/recipes/${id}`, { headers: {authorization: auth.token }})
-      .then((response)=> {
+    axios.delete(`${URL}/api/recipes/${id}`, { headers: { authorization: auth.token } })
+      .then((response) => {
         success();
       })
       .catch((error) => {
@@ -55,11 +55,11 @@ export function deleteRecipe(id, success){
   }
 }
 
-export function createRecipe(recipe, success){
-  return function(dispatch, getState){
+export function createRecipe(recipe, success) {
+  return function (dispatch, getState) {
     const { auth } = getState();
-    axios.post(`${URL}/api/recipes`, recipe, { headers: {authorization: auth.token }})
-      .then((response)=> {
+    axios.post(`${URL}/api/recipes`, recipe, { headers: { authorization: auth.token } })
+      .then((response) => {
         success();
       })
       .catch((error) => {
@@ -69,10 +69,10 @@ export function createRecipe(recipe, success){
   }
 }
 
-export function editRecipe(id, recipe, success){
-  return function(dispatch, getState){
+export function editRecipe(id, recipe, success) {
+  return function (dispatch, getState) {
     const { auth } = getState();
-    axios.put(`${URL}/api/recipes/${id}`, recipe, { headers: {authorization: auth.token }})
+    axios.put(`${URL}/api/recipes/${id}`, recipe, { headers: { authorization: auth.token } })
       .then((response) => {
         success();
       })

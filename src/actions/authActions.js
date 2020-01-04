@@ -1,9 +1,9 @@
 import axios from "axios";
 import { addMessageToContainer } from "./index";
-const URL = 'http://localhost:8000';
+const URL = process.env.REACT_APP_SERVER_URL;
 
-export function signUpUser({username, email, password}){
-  return function(dispatch){
+export function signUpUser({ username, email, password }) {
+  return function (dispatch) {
     axios.post(`${URL}/signup`, { username, email, password })
       .then(response => {
         if (response.data.token) {
@@ -23,12 +23,12 @@ export function authError(error) {
   return { type: 'AUTH_ERROR', payload: error };
 }
 
-export function clearAuthError(){
-  return {type: 'CLEAR_AUTH_ERROR' };
+export function clearAuthError() {
+  return { type: 'CLEAR_AUTH_ERROR' };
 }
 
-export function signInUser({ username, password }){
-  return function(dispatch){
+export function signInUser({ username, password }) {
+  return function (dispatch) {
     axios.post(`${URL}/signin`, { username, password })
       .then(response => {
         dispatch({ type: 'AUTH_USER', payload: response.data.token });
@@ -40,15 +40,15 @@ export function signInUser({ username, password }){
   }
 }
 
-export function signoutUser(){
+export function signoutUser() {
   localStorage.removeItem('token');
   return { type: 'USER_LOGOUT' };
 }
 
-export function getUserName(){
-  return function(dispatch, getState){
+export function getUserName() {
+  return function (dispatch, getState) {
     const { auth } = getState();
-    axios.get(`${URL}/username`, { headers: { authorization: auth.token }})
+    axios.get(`${URL}/username`, { headers: { authorization: auth.token } })
       .then(response => {
         dispatch({ type: 'SET_USERNAME', payload: response.data });
       })
