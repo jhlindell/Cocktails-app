@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
-function stockItemList(state = [], action){
-  switch(action.type){
+function stockItemList(state = [], action) {
+  switch (action.type) {
     case 'STOCK_ITEM_LIST':
       return action.payload;
     case 'CLEAR_STOCK_ITEM_LIST':
@@ -11,8 +11,8 @@ function stockItemList(state = [], action){
   }
 }
 
-function stockItem(state = null, action){
-  switch(action.type){
+function stockItem(state = null, action) {
+  switch (action.type) {
     case 'SINGLE_STOCK_ITEM':
       return action.payload;
     case 'CLEAR_SINGLE_STOCK_ITEM':
@@ -22,8 +22,8 @@ function stockItem(state = null, action){
   }
 }
 
-function newStockItem(state = null, action){
-  switch(action.type){
+function newStockItem(state = null, action) {
+  switch (action.type) {
     case 'NEW_STOCK_ITEM':
       return action.payload;
     case 'CLEAR_NEW_STOCK_ITEM':
@@ -33,8 +33,8 @@ function newStockItem(state = null, action){
   }
 }
 
-function recipeList(state = [], action){
-  switch(action.type){
+function recipeList(state = [], action) {
+  switch (action.type) {
     case 'RECIPE_LIST':
       return action.payload;
     case 'CLEAR_RECIPE_LIST':
@@ -44,8 +44,8 @@ function recipeList(state = [], action){
   }
 }
 
-function recipe(state = null, action){
-  switch(action.type){
+function recipe(state = null, action) {
+  switch (action.type) {
     case 'SINGLE_RECIPE':
       return action.payload;
     case 'CLEAR_SINGLE_RECIPE':
@@ -56,15 +56,15 @@ function recipe(state = null, action){
 }
 
 const styleErrorCode = (code) => {
-  if(code.message) {
-    return (code.message.includes('401')) ? 'bad username or password': code.message
+  if (code.message) {
+    return (code.message.includes('401')) ? 'bad username or password' : code.message
   } else {
     return code
   }
 }
 
-function authReducer(state = {}, action){
-  switch(action.type) {
+function authReducer(state = {}, action) {
+  switch (action.type) {
     case 'AUTH_USER':
       localStorage.setItem('token', action.payload);
       return { ...state, error: '', authenticated: true, token: action.payload };
@@ -82,8 +82,8 @@ function authReducer(state = {}, action){
   }
 }
 
-function userName(state = null, action){
-  switch(action.type) {
+function userName(state = null, action) {
+  switch (action.type) {
     case 'SET_USERNAME':
       return action.payload;
     default:
@@ -91,16 +91,16 @@ function userName(state = null, action){
   }
 }
 
-function messageReducer(state = [], action){
-  switch(action.type){
+function messageReducer(state = [], action) {
+  switch (action.type) {
     case 'ADD_MESSAGE':
       const message = action.payload;
-      return [ ...state, message ];
+      return [...state, message];
 
     case 'CLEAR_MESSAGE':
       let stateArray = state;
       let filteredArray = stateArray.filter(message => {
-        if(message.id && message.id !== action.payload){
+        if (message.id && message.id !== action.payload) {
           return message;
         }
         return null;
