@@ -18,7 +18,7 @@
     "@types/redux-logger": "^3.0.6",
     "@types/redux-thunk": "^2.1.0",
     "ajv": "^6.12.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "bootstrap": "^4.1.1",
     "connected-react-router": "^4.3.0",
     "history": "^4.7.2",
